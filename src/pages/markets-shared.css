@@ -1,0 +1,68 @@
+/* Shared by the markets screens: P/L colors, edge colors, number fades, row entrances. */
+
+.pnl-up { color: var(--tag-green-fg); }
+.pnl-down { color: var(--tag-red-fg); }
+.pnl-flat { color: var(--muted-foreground); }
+
+.edge-yes { color: var(--tag-green-fg); font-weight: 600; }
+.edge-no { color: var(--tag-red-fg); font-weight: 600; }
+.edge-weak { color: var(--muted-foreground); }
+
+.num-fade { display: inline-block; animation: fade-in var(--duration-slow) var(--ease-out) both; }
+
+.appear { animation: rise-in var(--duration-slow) var(--ease-out) both; }
+
+/* Market question with a two-line clamp */
+.mk-question {
+  font: 500 13px/20px var(--font-sans);
+  color: var(--foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
+/* Small "key  value" lists in side panels */
+.kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; font: 400 12px/18px var(--font-sans); }
+.kv > :nth-child(odd) { color: var(--muted-foreground); white-space: nowrap; }
+.kv > :nth-child(even) { text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kv .mono { font-size: 12px; }
+
+/* "Paper trade" note */
+.paper-note { display: inline-flex; align-items: center; gap: 6px; font: 400 12px/16px var(--font-sans); color: var(--muted-foreground); }
+
+/* Factor weight: three short bars */
+.weight { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; flex-shrink: 0; }
+.weight > span { width: 3px; border-radius: 1px; background: var(--border); }
+.weight > span:nth-child(1) { height: 4px; }
+.weight > span:nth-child(2) { height: 7px; }
+.weight > span:nth-child(3) { height: 10px; }
+.weight > span.on { background: var(--foreground); }
+
+/* Analyst factors list (detail page and trade approvals) */
+.factors { display: flex; flex-direction: column; gap: 10px; }
+.factor { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 10px; align-items: start; font: 400 13px/20px var(--font-sans); }
+.factor .tag { justify-content: center; margin-top: 2px; }
+.factor-text { text-wrap: pretty; }
+.factor-weight { display: inline-flex; align-items: center; gap: 6px; font: 400 11px/20px var(--font-mono); color: var(--muted-foreground); white-space: nowrap; }
+.factors-compact { gap: 8px; }
+.factors-compact .factor { grid-template-columns: 34px minmax(0, 1fr) auto; font-size: 12px; line-height: 18px; }
+.factors-compact .factor .tag { margin-top: 1px; }
+.factors-compact .factor-weight { line-height: 18px; }
+
+/* Whale trade line */
+.whale { display: flex; align-items: center; gap: 6px; min-width: 0; font: 400 13px/20px var(--font-sans); white-space: nowrap; }
+.whale-wallet { font: 400 12px/20px var(--font-mono); }
+.whale-verb { color: var(--muted-foreground); }
+.whale-size { font: 600 12px/20px var(--font-mono); font-variant-numeric: tabular-nums; }
+.whale-price { font: 400 12px/20px var(--font-mono); color: var(--muted-foreground); }
+.whale-ago { margin-left: auto; font: 400 11px/16px var(--font-mono); color: var(--muted-foreground); }
+.whale-compact { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.whale-compact .whale { font-size: 12px; }
+.whale-compact .tag { min-width: 32px; justify-content: center; }
+.whale-who { font: 400 11px/16px var(--font-mono); color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.close-body { display: flex; flex-direction: column; gap: 10px; }
+.close-body p { margin: 0; font: 400 13px/20px var(--font-sans); text-wrap: pretty; }
+.close-body b { font-weight: 600; }

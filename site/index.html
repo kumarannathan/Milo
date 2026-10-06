@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milo – control room for agent teams</title>
+    <meta
+      name="description"
+      content="Milo is an open-source control room for autonomous agent teams. Run it on your machine, pick a sales development or prediction markets playbook, bring your own keys, and approve every email or trade before it goes out."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Milo" />
+    <meta property="og:title" content="Milo – control room for agent teams" />
+    <meta
+      property="og:description"
+      content="Open-source and self-hosted. Pick a playbook, bring your own keys, and approve every email or trade before it goes out."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Milo – control room for agent teams" />
+    <meta
+      name="twitter:description"
+      content="Open-source and self-hosted. Pick a playbook, bring your own keys, and approve every email or trade before it goes out."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        var saved = null;
+        try { saved = localStorage.getItem('milo_theme'); } catch (e) {}
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.classList.toggle('dark', dark);
+      })();
+    </script>
+    <link rel="stylesheet" href="./site.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></symbol>
+        <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></symbol>
+        <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+        <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="M12 5v14" /></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16" /><path d="M4 12h16" /><path d="M4 18h16" /></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+        <symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+        <symbol id="i-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></symbol>
+        <symbol id="i-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></symbol>
+        <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+        <symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5" /><path d="M9 8V2" /><path d="M15 8V2" /><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z" /></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></symbol>
+      </defs>
+    </svg>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="nav" data-nav>
+      <div class="container nav-inner">
+        <a class="brand" href="#top" aria-label="Milo, back to top">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span class="wordmark">Milo</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="#playbooks">Playbooks</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#connections">Connections</a>
+          <a href="https://github.com/kumarannathan/milo#readme" rel="noopener">Docs</a>
+          <a href="https://github.com/kumarannathan/milo" rel="noopener">GitHub</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark theme">
+            <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon" /></svg>
+            <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+          </button>
+          <a class="btn btn-primary nav-cta" href="#quickstart">Get started</a>
+          <button
+            class="icon-btn nav-menu-btn"
+            type="button"
+            data-menu-toggle
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Open menu"
+          >
+            <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu" /></svg>
+            <svg class="icon icon-close" aria-hidden="true"><use href="#i-x" /></svg>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu" id="mobile-menu" hidden>
+        <nav class="container" aria-label="Mobile">
+          <a href="#playbooks">Playbooks</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#connections">Connections</a>
+          <a href="https://github.com/kumarannathan/milo#readme" rel="noopener">Docs</a>
+          <a href="https://github.com/kumarannathan/milo" rel="noopener">GitHub</a>
+          <a class="btn btn-primary" href="#quickstart">Get started</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="container">
+          <div class="hero-copy">
+            <a class="hero-pill reveal" href="https://github.com/kumarannathan/milo" rel="noopener">
+              <span class="tag tag-gray">MIT</span>
+              <span>Open source, self-hosted</span>
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right" /></svg>
+            </a>
+            <h1 id="hero-title" class="reveal">Run agent teams on your own machine.</h1>
+            <p class="hero-sub reveal">
+              Pick a playbook, bring your own keys, and approve every email or trade before it goes out.
+            </p>
+            <div class="hero-actions reveal">
+              <a class="btn btn-primary btn-lg" href="#quickstart">Get started</a>
+              <a class="btn btn-outline btn-lg" href="https://github.com/kumarannathan/milo" rel="noopener">
+                <svg class="icon" aria-hidden="true"><use href="#i-github" /></svg>
+                View on GitHub
+              </a>
+            </div>
+            <div class="install-hint reveal">
+              <div class="code-chip">
+                <code><span class="prompt" aria-hidden="true">$</span> npm install &amp;&amp; npm start</code>
+                <button class="copy-btn" type="button" data-copy="npm install && npm start" aria-label="Copy install command">
+                  <svg class="icon icon-sm i-copy" aria-hidden="true"><use href="#i-copy" /></svg>
+                  <svg class="icon icon-sm i-check" aria-hidden="true"><use href="#i-check" /></svg>
+                </button>
+              </div>
+              <span class="install-note">Runs on localhost:4400 · Node 20+</span>
+            </div>
+          </div>
+
+          <figure class="hero-preview reveal" aria-labelledby="hero-preview-cap">
+            <div class="frame" aria-hidden="true">
+              <div class="frame-bar">
+                <span class="frame-dots"><i></i><i></i><i></i></span>
+                <span class="frame-url">localhost:4400</span>
+                <span class="frame-spacer"></span>
+              </div>
+              <div class="app">
+                <aside class="app-side">
+                  <div class="app-brand">
+                    <span class="wordmark wordmark-sm">Milo</span>
+                    <span class="mono dim">v0.1.0</span>
+                  </div>
+                  <div class="app-team">
+                    <span class="team-mark">L</span>
+                    <span class="team-text"><b>Ledgerline outbound</b><small>Sales development</small></span>
+                  </div>
+                  <div class="app-nav">
+                    <span class="is-active"><svg class="icon icon-sm"><use href="#i-dashboard" /></svg>Control room</span>
+                    <span><svg class="icon icon-sm"><use href="#i-inbox" /></svg>Approvals<em class="count" data-side-approvals>6</em></span>
+                    <span><svg class="icon icon-sm"><use href="#i-building" /></svg>Accounts</span>
+                    <span><svg class="icon icon-sm"><use href="#i-message" /></svg>Conversations<em class="count">2</em></span>
+                    <span><svg class="icon icon-sm"><use href="#i-users" /></svg>Agents</span>
+                    <span><svg class="icon icon-sm"><use href="#i-plug" /></svg>Connections</span>
+                    <span><svg class="icon icon-sm"><use href="#i-settings" /></svg>Settings</span>
+                  </div>
+                  <div class="app-side-foot"><span class="dot dot-run"></span>Runner online · 3 workers</div>
+                </aside>
+                <div class="app-main">
+                  <div class="app-head">
+                    <div class="app-head-text">
+                      <div class="app-title">
+                        <span class="app-h">Ledgerline outbound</span>
+                        <span class="status-pill"><span class="dot dot-run"></span>Active</span>
+                      </div>
+                      <div class="app-meta">
+                        <span>Sales development · 7 agents</span><span class="sep">·</span>
+                        <span>Autonomy: <b>Review sends only</b></span><span class="sep hide-sm">·</span>
+                        <span class="mono hide-sm" data-clock>Tue Oct 6, 2:47 PM</span>
+                      </div>
+                    </div>
+                    <span class="btn btn-outline btn-xs hide-sm">Team settings</span>
+                    <span class="btn btn-primary btn-xs">Pause team</span>
+                  </div>
+                  <div class="app-body">
+                    <div class="review-bar">
+                      <svg class="icon icon-sm"><use href="#i-inbox" /></svg>
+                      <span class="review-text"><b><span data-review-count>6</span> messages waiting for review</b><span class="review-dim"> · first touches, replies and invites</span></span>
+                      <span class="review-cta">Review →</span>
+                    </div>
+
+                    <div class="app-section">
+                      <div class="app-section-head">
+                        <span class="app-h2">Today</span>
+                        <span class="dim">Since 12:00 AM · bars show the last 7 days</span>
+                      </div>
+                      <div class="stats" data-stats></div>
+                    </div>
+
+                    <div class="app-section">
+                      <div class="app-section-head">
+                        <span class="app-h2">Pipeline</span>
+                        <span class="dim hide-sm">Work moves left to right. Each agent hands off to the next.</span>
+                        <span class="app-link">All agents →</span>
+                      </div>
+                      <div class="pipe" data-pipe></div>
+                    </div>
+
+                    <div class="app-grid">
+                      <div class="panel">
+                        <div class="panel-head">
+                          <span class="app-h2">Activity</span>
+                          <span class="live"><span class="dot dot-run"></span>Live</span>
+                          <span class="seg"><span class="is-on">All</span><span>Outbound</span><span>Errors</span></span>
+                        </div>
+                        <ol class="feed" data-feed></ol>
+                      </div>
+                      <div class="panel panel-waiting">
+                        <div class="panel-head">
+                          <span class="app-h2">Waiting on you</span>
+                          <span class="app-link">Open inbox →</span>
+                        </div>
+                        <ol class="waiting" data-waiting></ol>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption id="hero-preview-cap" class="preview-cap">
+              The Control room running on sample data. Milo ships with a sample-data provider, so you can watch the whole
+              team work before adding a single key.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Playbooks -->
+      <section class="section" id="playbooks" aria-labelledby="playbooks-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Playbooks</p>
+            <h2 id="playbooks-title" class="reveal">Two playbooks. Pick one on first run.</h2>
+            <p class="lead reveal">
+              A playbook is a team of agents that pass work to each other through a task queue. Each agent has one job, its
+              own schedule and its own model.
+            </p>
+          </div>
+
+          <div class="tabs reveal" role="tablist" aria-label="Playbooks" data-tabs>
+            <button class="tab" role="tab" id="tab-sales" aria-controls="panel-sales" aria-selected="true" type="button">
+              Sales development <span class="tab-meta">7 agents</span>
+            </button>
+            <button class="tab" role="tab" id="tab-markets" aria-controls="panel-markets" aria-selected="false" tabindex="-1" type="button">
+              Markets <span class="tab-meta">5 agents</span>
+            </button>
+          </div>
+
+          <div class="pb-panels reveal">
+            <!-- Sales development -->
+            <div class="pb-panel is-active" role="tabpanel" id="panel-sales" aria-labelledby="tab-sales" tabindex="0" data-playbook="sales">
+              <div class="pb-intro">
+                <p>Find companies that fit your ICP, research them, write outreach you approve, and book meetings.</p>
+                <span class="tag tag-gray">Default autonomy: Review sends only</span>
+              </div>
+
+              <div class="flow" data-flow>
+                <div class="flow-inner">
+                <ol class="flow-list">
+                  <li class="flow-step" data-out="Found Acme Health">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Sc</span><h3>Scout</h3></div>
+                      <p>Finds companies that match your ICP.</p>
+                      <div class="flow-foot"><span class="mono">every 4 h</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Brief with 6 sources">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Re</span><h3>Researcher</h3></div>
+                      <p>Writes an account brief: why now, pains, angles, with sources.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="3 contacts, 2 verified">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Pr</span><h3>Prospector</h3></div>
+                      <p>Finds the right people at each account and verifies their emails.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Scored 92 → outreach">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Qu</span><h3>Qualifier</h3></div>
+                      <p>Scores each lead and decides: outreach, research more, or skip.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Draft waits for you">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Pe</span><h3>Personalizer</h3></div>
+                      <p>Writes outreach from the research brief.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Sent after approval">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">SD</span><h3>SDR</h3></div>
+                      <p>Sends approved emails, reads replies, books meetings, escalates to you.</p>
+                      <div class="flow-foot"><span class="mono">every 10 min</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Synced to HubSpot">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">CR</span><h3>CRM Agent</h3></div>
+                      <p>Keeps HubSpot in sync with everything the team does.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                </ol>
+                <div class="flow-track" aria-hidden="true">
+                  <span class="flow-rail"></span>
+                  <span class="flow-marker"><span class="dot dot-run"></span><span>Acme Health</span></span>
+                </div>
+                </div>
+              </div>
+
+              <ul class="pb-facts">
+                <li><span class="mono">Qualifier</span> 91 and up goes to outreach, 70 to 90 gets more research, below 70 is skipped.</li>
+                <li><span class="mono">SDR</span> Sends between 8 AM and 5 PM in the prospect's time zone, up to 50 a day.</li>
+                <li><span class="mono">Personalizer</span> Under 120 words, three-step sequence, four days apart.</li>
+              </ul>
+              <p class="pb-facts-note">Defaults. Every number is editable per agent.</p>
+
+              <figure class="pb-preview" aria-label="Preview of an account brief and its contacts">
+                <div class="card brief" aria-hidden="true">
+                  <div class="card-head">
+                    <span class="mono-badge mono-badge-sm">Re</span>
+                    <span class="card-title">Research brief · Acme Health</span>
+                    <span class="mono dim hide-sm">Researcher · Oct 6, 2:41 PM</span>
+                  </div>
+                  <div class="brief-body">
+                    <p>
+                      A 1,200-person health system in Detroit with three hospitals and 22 outpatient sites. Billing runs on
+                      Epic; prior auths are still worked by hand by a central team of about 30.
+                    </p>
+                    <div class="why-now">
+                      <span class="why-label">Why now</span>
+                      New surgical volume from the Dearborn site plus 14 open revenue-cycle roles. A new VP Revenue Cycle
+                      started in March.
+                    </div>
+                    <div class="brief-cols">
+                      <div>
+                        <span class="brief-h">Pains</span>
+                        <ul>
+                          <li>Prior auths worked by hand by a team of about 30</li>
+                          <li>Denial rate up after the Dearborn opening</li>
+                          <li>14 roles open for 60+ days</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <span class="brief-h">Angles</span>
+                        <ol>
+                          <li>Growth outpacing the revenue-cycle team</li>
+                          <li>New VP planning the 2027 budget</li>
+                          <li>Authorization delays named in the Q4 report</li>
+                        </ol>
+                      </div>
+                    </div>
+                    <div class="sources">
+                      <span class="dim">Sources</span>
+                      <span class="src">crainsdetroit.com</span>
+                      <span class="src">acmehealth.org/careers</span>
+                      <span class="src">acmehealth.org/news</span>
+                      <span class="src">linkedin.com</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card contacts" aria-hidden="true">
+                  <div class="card-head">
+                    <span class="mono-badge mono-badge-sm">Pr</span>
+                    <span class="card-title">Contacts</span>
+                    <span class="dim">scored by Qualifier</span>
+                  </div>
+                  <div class="contact-row">
+                    <div class="contact-who"><b>Dana Whitfield</b><small>VP Revenue Cycle</small></div>
+                    <span class="tag tag-green">Verified</span>
+                    <span class="score mono">92</span>
+                    <span class="tag tag-blue">Outreach</span>
+                  </div>
+                  <div class="contact-row">
+                    <div class="contact-who"><b>Kevin Osei</b><small>Director, Patient Access</small></div>
+                    <span class="tag tag-amber">Likely</span>
+                    <span class="score mono">84</span>
+                    <span class="tag tag-violet">Research more</span>
+                  </div>
+                  <div class="contact-row">
+                    <div class="contact-who"><b>Paul Brenner</b><small>IT Manager</small></div>
+                    <span class="tag tag-red">Invalid</span>
+                    <span class="score mono">41</span>
+                    <span class="tag tag-gray">Skip</span>
+                  </div>
+                </div>
+                <figcaption class="preview-cap">Sample data from the built-in provider.</figcaption>
+              </figure>
+            </div>
+
+            <!-- Markets -->
+            <div class="pb-panel" role="tabpanel" id="panel-markets" aria-labelledby="tab-markets" tabindex="0" hidden data-playbook="markets">
+              <div class="pb-intro">
+                <p>Watch Polymarket, follow large trades, estimate the odds, and paper-trade when the edge is big enough.</p>
+                <span class="tag tag-amber">Paper trading only. No real money moves.</span>
+              </div>
+
+              <div class="flow flow-5" data-flow>
+                <div class="flow-inner">
+                <ol class="flow-list">
+                  <li class="flow-step" data-out="Watching · $1.2M 24h volume">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Sn</span><h3>Scanner</h3></div>
+                      <p>Finds active markets worth watching.</p>
+                      <div class="flow-foot"><span class="mono">every 30 min</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="$48k on YES at 0.41">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Wh</span><h3>Whale Watch</h3></div>
+                      <p>Follows large trades on the markets you watch.</p>
+                      <div class="flow-foot"><span class="mono">every 10 min</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Estimate 0.52 vs market 0.41">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">An</span><h3>Analyst</h3></div>
+                      <p>Writes a brief and estimates the odds.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Paper YES · $46.60 stake">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Tr</span><h3>Trader</h3></div>
+                      <p>Sizes paper trades with fractional Kelly when the edge is big enough.</p>
+                      <div class="flow-foot"><span class="mono">on new work</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                  <li class="flow-step" data-out="Marked at 0.44 · +$3.41">
+                    <div class="flow-card">
+                      <div class="flow-top"><span class="mono-badge">Bk</span><h3>Bookkeeper</h3></div>
+                      <p>Marks positions to market and settles resolved ones.</p>
+                      <div class="flow-foot"><span class="mono">every 5 min</span></div>
+                      <div class="flow-state"><span class="dot"></span><span class="flow-state-text">Waiting</span></div>
+                    </div>
+                  </li>
+                </ol>
+                <div class="flow-track" aria-hidden="true">
+                  <span class="flow-rail"></span>
+                  <span class="flow-marker"><span class="dot dot-run"></span><span>Fed cuts in December</span></span>
+                </div>
+                </div>
+              </div>
+
+              <ul class="pb-facts">
+                <li><span class="mono">Analyst</span> Proposes a trade when its estimate beats the market by 8+ points at 60%+ confidence.</li>
+                <li><span class="mono">Trader</span> Stakes a quarter Kelly, capped at 5% of the bankroll, with up to 10 open positions.</li>
+                <li><span class="mono">Scanner</span> Watches up to 30 markets with $25k+ daily volume that close within 90 days.</li>
+              </ul>
+              <p class="pb-facts-note">Defaults. Every number is editable per agent. Prices and trades come from Polymarket's public API.</p>
+
+              <figure class="pb-preview pb-preview-markets" aria-label="Preview of a paper portfolio with equity curve and open positions">
+                <div class="card equity" aria-hidden="true">
+                  <div class="card-head">
+                    <span class="card-title">Paper desk</span>
+                    <span class="tag tag-gray">Paper</span>
+                    <span class="live"><span class="dot dot-run"></span>Marked every 5 min</span>
+                  </div>
+                  <div class="equity-body">
+                    <div class="equity-top">
+                      <div>
+                        <span class="dim">Equity</span>
+                        <div class="equity-value mono" data-equity>$1,082.79</div>
+                        <span class="pnl pos mono" data-equity-delta>+$82.79 (+8.3%) since start</span>
+                      </div>
+                      <dl class="equity-stats">
+                        <div><dt>Cash</dt><dd class="mono">$832.25</dd></div>
+                        <div><dt>Open</dt><dd class="mono">5</dd></div>
+                        <div><dt>Realized</dt><dd class="mono pnl pos">+$61.90</dd></div>
+                        <div><dt>Unrealized</dt><dd class="mono pnl pos" data-unrealized>+$20.89</dd></div>
+                      </dl>
+                    </div>
+                    <svg class="spark" viewBox="0 0 320 96" preserveAspectRatio="none" data-spark>
+                      <line class="spark-base" x1="0" x2="320" y1="80" y2="80" />
+                      <polyline class="spark-line" points="" />
+                    </svg>
+                    <div class="spark-axis mono dim"><span>Sep 1</span><span>Oct 6</span></div>
+                  </div>
+                </div>
+                <div class="card positions" aria-hidden="true">
+                  <div class="card-head">
+                    <span class="card-title">Open positions</span>
+                    <span class="dim">Polymarket · paper</span>
+                  </div>
+                  <div class="pos-row pos-row-head">
+                    <span>Market</span><span>Side</span><span class="r">Stake</span><span class="r hide-sm">Entry</span><span class="r">Mark</span><span class="r">P/L</span>
+                  </div>
+                  <div data-positions></div>
+                </div>
+                <figcaption class="preview-cap">Sample data from the built-in provider.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Approvals -->
+      <section class="section" id="how-it-works" aria-labelledby="approvals-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">How it works</p>
+            <h2 id="approvals-title" class="reveal">Nothing is sent or traded until you approve it.</h2>
+            <p class="lead reveal">
+              Drafts arrive in Approvals with the facts behind them: the research brief, its sources and the lead score.
+              Approve, edit, or reject with a note. The writer reads your note before its next draft.
+            </p>
+          </div>
+
+          <div class="approvals-grid">
+            <div class="autonomy">
+              <h3 class="reveal">Autonomy levels</h3>
+              <p class="muted reveal">Set per team. Change it any time in Settings.</p>
+
+              <div class="auto-group reveal">
+                <span class="auto-group-label">Sales development</span>
+                <ul class="auto-list">
+                  <li class="is-default">
+                    <span class="radio" aria-hidden="true"></span>
+                    <div>
+                      <div class="auto-name">Review sends only <span class="tag tag-gray">Default</span></div>
+                      <p>Research, scoring and CRM updates run on their own. Every email, reply and invite waits for you.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="radio" aria-hidden="true"></span>
+                    <div>
+                      <div class="auto-name">Review first touches</div>
+                      <p>You approve the first email to each person. Follow-ups and replies go out on their own.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="radio" aria-hidden="true"></span>
+                    <div>
+                      <div class="auto-name">Autopilot</div>
+                      <p>Nothing waits for review. Escalations still come to you.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="auto-group reveal">
+                <span class="auto-group-label">Markets</span>
+                <ul class="auto-list">
+                  <li class="is-default">
+                    <span class="radio" aria-hidden="true"></span>
+                    <div>
+                      <div class="auto-name">Review trades <span class="tag tag-gray">Default</span></div>
+                      <p>Agents research and propose. Every trade waits for you.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="radio" aria-hidden="true"></span>
+                    <div>
+                      <div class="auto-name">Autopilot</div>
+                      <p>Trader opens and closes paper positions on its own, within your limits.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <figure class="approval-preview reveal" aria-label="Preview of an approval: a drafted first-touch email with research facts and a lead score of 92">
+              <div class="card approval" aria-hidden="true">
+                <div class="approval-main">
+                  <div class="ap-person">
+                    <span class="avatar">DW</span>
+                    <div class="ap-who">
+                      <div class="ap-name">Dana Whitfield <span class="tag tag-gray">First touch</span></div>
+                      <span class="dim">VP Revenue Cycle · Acme Health</span>
+                      <span class="ap-email mono">dana.whitfield@acmehealth.org <span class="tag tag-green">Verified</span></span>
+                    </div>
+                  </div>
+                  <div class="mail">
+                    <div class="mail-row"><span class="mail-k">From</span><span>Jordan Reyes &lt;sales@ledgerline.io&gt;</span></div>
+                    <div class="mail-row"><span class="mail-k">To</span><span>Dana Whitfield &lt;dana.whitfield@acmehealth.org&gt;</span></div>
+                    <div class="mail-row"><span class="mail-k">Subject</span><b>Prior-auth volume after the Dearborn opening</b></div>
+                    <div class="mail-body">
+                      <p>Hi Dana,</p>
+                      <p>
+                        Congrats on opening the Dearborn surgery center in August.<sup>1</sup> With 14 revenue-cycle roles
+                        open on your careers page,<sup>2</sup> I'm guessing prior-auth volume is growing faster than the team.
+                      </p>
+                      <p>
+                        Lakeshore Physicians was in a similar spot last year. Ledgerline took over their prior-auth submissions
+                        and payer follow-up, and turnaround went from 5 days to 9 hours without new hires.
+                      </p>
+                      <p>Would a 20-minute call next week be useful?</p>
+                      <p>Jordan Reyes<br />Ledgerline</p>
+                    </div>
+                  </div>
+                  <div class="ap-meta mono dim">
+                    <span>Draft by Personalizer · 71 words</span>
+                    <span>Sends Wed 9:10 AM their time</span>
+                  </div>
+                  <div class="ap-actions">
+                    <span class="btn btn-primary btn-sm" data-approve>Approve and send</span>
+                    <span class="btn btn-outline btn-sm">Edit</span>
+                    <span class="btn btn-ghost btn-sm">Reject with note</span>
+                  </div>
+                </div>
+                <div class="approval-side">
+                  <div class="side-block">
+                    <span class="side-h">Facts from the research brief</span>
+                    <ol class="facts">
+                      <li><span class="fact-n mono">1</span><div>Opened the Dearborn ambulatory surgery center in August.<span class="src">crainsdetroit.com</span></div></li>
+                      <li><span class="fact-n mono">2</span><div>14 open revenue-cycle roles, 6 of them prior-auth specialists.<span class="src">acmehealth.org/careers</span></div></li>
+                      <li><span class="fact-n mono">3</span><div>Dana joined as VP Revenue Cycle in March.<span class="src">linkedin.com</span></div></li>
+                    </ol>
+                  </div>
+                  <div class="side-block">
+                    <div class="score-head">
+                      <span class="side-h">Lead score</span>
+                      <span class="score-total mono">92<small>/100</small></span>
+                    </div>
+                    <div class="bars" data-bars>
+                      <div class="bar"><div class="bar-label"><span>ICP fit <i class="mono">×0.30</i></span><span class="mono">95</span></div><div class="bar-track"><span style="--w: 95%"></span></div></div>
+                      <div class="bar"><div class="bar-label"><span>Company growth <i class="mono">×0.15</i></span><span class="mono">88</span></div><div class="bar-track"><span style="--w: 88%"></span></div></div>
+                      <div class="bar"><div class="bar-label"><span>Role relevance <i class="mono">×0.25</i></span><span class="mono">96</span></div><div class="bar-track"><span style="--w: 96%"></span></div></div>
+                      <div class="bar"><div class="bar-label"><span>Buying signal <i class="mono">×0.20</i></span><span class="mono">90</span></div><div class="bar-track"><span style="--w: 90%"></span></div></div>
+                      <div class="bar"><div class="bar-label"><span>Contact quality <i class="mono">×0.10</i></span><span class="mono">85</span></div><div class="bar-track"><span style="--w: 85%"></span></div></div>
+                    </div>
+                    <div class="score-foot"><span class="tag tag-blue">Outreach</span><span class="dim">91+ goes to outreach · scored by Qualifier</span></div>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="preview-cap">An approval in the Sales development playbook, on sample data.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- Connections -->
+      <section class="section" id="connections" aria-labelledby="connections-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Connections</p>
+            <h2 id="connections-title" class="reveal">Bring your own keys. Choose who does what.</h2>
+            <p class="lead reveal">
+              Agents ask for capabilities such as Find companies or Send email. You pick which connection handles each one,
+              per agent, and can swap it later without touching the agent.
+            </p>
+          </div>
+
+          <figure class="needs-preview reveal" aria-label="Preview of the capabilities the SDR agent needs and the connection chosen for each">
+            <div class="card needs" aria-hidden="true">
+              <div class="card-head">
+                <span class="mono-badge mono-badge-sm">SD</span>
+                <span class="card-title">SDR · What it needs</span>
+                <span class="dim hide-sm needs-hint">Agents ask for an action. You choose which connection does it.</span>
+              </div>
+              <div class="needs-row needs-row-head">
+                <span>Action</span><span class="hide-md">Capability</span><span class="hide-md">Need</span><span>Connection</span><span>Status</span>
+              </div>
+              <div class="needs-row">
+                <span class="strong">Send email</span><span class="mono dim hide-md">email.send</span><span class="dim hide-md">Required</span>
+                <span class="select"><span class="select-text">Email inbox <span class="dim">sales@ledgerline.io</span></span><svg class="icon icon-xs"><use href="#i-chevron-down" /></svg></span>
+                <span><span class="tag tag-green">Connected</span></span>
+              </div>
+              <div class="needs-row">
+                <span class="strong">Read replies</span><span class="mono dim hide-md">email.read</span><span class="dim hide-md">Required</span>
+                <span class="select"><span class="select-text">Email inbox <span class="dim">sales@ledgerline.io</span></span><svg class="icon icon-xs"><use href="#i-chevron-down" /></svg></span>
+                <span><span class="tag tag-green">Connected</span></span>
+              </div>
+              <div class="needs-row">
+                <span class="strong">Write text</span><span class="mono dim hide-md">llm.complete</span><span class="dim hide-md">Required</span>
+                <span class="select select-live"><span class="select-text" data-model-cycle>Anthropic <span class="dim">claude-sonnet-4-5</span></span><svg class="icon icon-xs"><use href="#i-chevron-down" /></svg></span>
+                <span><span class="tag tag-green">Connected</span></span>
+              </div>
+              <div class="needs-row">
+                <span class="strong">Post alerts</span><span class="mono dim hide-md">notify.post</span><span class="dim hide-md">Optional</span>
+                <span class="select"><span class="select-text">Slack <span class="dim">#sdr-team</span></span><svg class="icon icon-xs"><use href="#i-chevron-down" /></svg></span>
+                <span><span class="tag tag-green">Connected</span></span>
+              </div>
+              <div class="needs-row">
+                <span class="strong">Book meetings</span><span class="mono dim hide-md">calendar.book</span><span class="dim hide-md">Optional</span>
+                <span class="select select-empty"><span class="select-text dim">Not set · uses your booking link</span><svg class="icon icon-xs"><use href="#i-chevron-down" /></svg></span>
+                <span><span class="tag tag-gray">Skipped</span></span>
+              </div>
+            </div>
+          </figure>
+
+          <ul class="providers" aria-label="Supported connections">
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Anthropic</h3></div>
+              <p>Claude models for every agent that writes.</p>
+              <div class="caps"><span class="tag tag-gray">Write text</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>OpenAI</h3></div>
+              <p>OpenAI models, or any OpenAI-compatible endpoint.</p>
+              <div class="caps"><span class="tag tag-gray">Write text</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Ollama</h3><span class="tag tag-teal">Local</span></div>
+              <p>Models running on your own machine.</p>
+              <div class="caps"><span class="tag tag-gray">Write text</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Tavily</h3></div>
+              <p>Web search and page extraction for research.</p>
+              <div class="caps"><span class="tag tag-gray">Search the web</span><span class="tag tag-gray">Read web pages</span><span class="tag tag-gray">Track news</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Apollo</h3></div>
+              <p>Company and people search.</p>
+              <div class="caps"><span class="tag tag-gray">Find companies</span><span class="tag tag-gray">Find people</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Hunter</h3></div>
+              <p>Work email lookup and verification.</p>
+              <div class="caps"><span class="tag tag-gray">Find work emails</span><span class="tag tag-gray">Verify emails</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>HubSpot</h3></div>
+              <p>Companies, contacts and email activity.</p>
+              <div class="caps"><span class="tag tag-gray">Read the CRM</span><span class="tag tag-gray">Update the CRM</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Email inbox</h3><span class="tag tag-gray">SMTP · IMAP</span></div>
+              <p>Any mailbox you can reach over SMTP and IMAP.</p>
+              <div class="caps"><span class="tag tag-gray">Send email</span><span class="tag tag-gray">Read replies</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Slack</h3></div>
+              <p>Alerts and escalations in a channel.</p>
+              <div class="caps"><span class="tag tag-gray">Post alerts</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Discord</h3></div>
+              <p>Alerts and escalations in a channel.</p>
+              <div class="caps"><span class="tag tag-gray">Post alerts</span></div>
+            </li>
+            <li class="provider reveal">
+              <div class="provider-top"><h3>Polymarket</h3><span class="tag tag-green">No key</span></div>
+              <p>Public market data for the Markets playbook.</p>
+              <div class="caps"><span class="tag tag-gray">Find markets</span><span class="tag tag-gray">Read prices</span><span class="tag tag-gray">Read trades</span></div>
+            </li>
+            <li class="provider provider-sample reveal">
+              <div class="provider-top"><h3>Sample data</h3><span class="tag tag-blue">Built in</span></div>
+              <p>Fake companies, people, markets and model output.</p>
+              <div class="caps"><span class="tag tag-gray">Every capability</span></div>
+            </li>
+          </ul>
+
+          <div class="callout reveal">
+            <span class="mono-badge" aria-hidden="true">Sd</span>
+            <p>
+              <b>Start without keys.</b> Turn on Sample data during setup. It answers every capability, so both playbooks run
+              end to end and you can see what each agent produces before you connect a real service.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Observability -->
+      <section class="section" id="observability" aria-labelledby="obs-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Per-agent control</p>
+            <h2 id="obs-title" class="reveal">See every run, every call and what it cost.</h2>
+            <p class="lead reveal">
+              Each run records its duration, tokens in and out, and cost. Each tool call records the operation, status code
+              and latency. If a vendor rejects a key, the agent stops and holds its work until you reconnect.
+            </p>
+          </div>
+
+          <ul class="controls">
+            <li class="reveal"><h3>On or off</h3><p>Turn agents on or off one at a time.</p><code>enabled: true</code></li>
+            <li class="reveal"><h3>Schedule</h3><p>A cron expression, or run when work arrives.</p><code>*/10 * * * *</code></li>
+            <li class="reveal"><h3>Model</h3><p>Pick the connection and model per agent.</p><code>llama3.1:8b</code></li>
+            <li class="reveal"><h3>Config</h3><p>Caps, thresholds, windows and batch sizes.</p><code>dailyCap: 50</code></li>
+          </ul>
+
+          <figure class="obs-preview reveal" aria-label="Preview of an agent's recent runs with tokens and cost, and a live list of tool calls with status codes and latency">
+            <div class="obs-grid" aria-hidden="true">
+              <div class="card runs">
+                <div class="card-head">
+                  <span class="mono-badge mono-badge-sm">SD</span>
+                  <span class="card-title">SDR · Recent runs</span>
+                  <span class="dim hide-sm">every 10 min · claude-sonnet-4-5</span>
+                </div>
+                <div class="table-scroll">
+                  <div class="run-row run-row-head">
+                    <span>Run</span><span>Started</span><span>Status</span><span class="r">Duration</span><span class="r">Tokens in / out</span><span class="r">Cost</span><span>Result</span>
+                  </div>
+                  <div class="run-row"><span class="dim">run_9f3a1</span><span>2:40 PM</span><span><span class="tag tag-green">OK</span></span><span class="r">6.2s</span><span class="r">4,210 / 612</span><span class="r">$0.022</span><span class="res">6 sent, 1 reply read</span></div>
+                  <div class="run-row"><span class="dim">run_9f37c</span><span>2:30 PM</span><span><span class="tag tag-green">OK</span></span><span class="r">4.8s</span><span class="r">3,880 / 540</span><span class="r">$0.020</span><span class="res">Pricing question escalated</span></div>
+                  <div class="run-row"><span class="dim">run_9f357</span><span>2:20 PM</span><span><span class="tag tag-green">OK</span></span><span class="r">5.1s</span><span class="r">2,960 / 410</span><span class="r">$0.015</span><span class="res">Reconnected, 3 held sends went out</span></div>
+                  <div class="run-row"><span class="dim">run_9f332</span><span>2:10 PM</span><span><span class="tag tag-red">Error</span></span><span class="r">0.4s</span><span class="r">—</span><span class="r">—</span><span class="res res-err">smtp.auth 535, work held</span></div>
+                  <div class="run-row"><span class="dim">run_9f30d</span><span>2:00 PM</span><span><span class="tag tag-green">OK</span></span><span class="r">7.9s</span><span class="r">5,120 / 880</span><span class="r">$0.029</span><span class="res">Booked Lena Brandt, Fri 11:30</span></div>
+                  <div class="run-row"><span class="dim">run_9f2e8</span><span>1:50 PM</span><span><span class="tag tag-green">OK</span></span><span class="r">3.3s</span><span class="r">1,940 / 220</span><span class="r">$0.009</span><span class="res">No new replies</span></div>
+                </div>
+              </div>
+              <div class="card calls">
+                <div class="card-head">
+                  <span class="card-title">Recent tool calls</span>
+                  <span class="live"><span class="dot dot-run"></span>All agents</span>
+                </div>
+                <ol class="call-list" data-calls></ol>
+              </div>
+            </div>
+            <figcaption class="preview-cap">Runs and tool calls from the Agents screen, on sample data.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Quickstart -->
+      <section class="section" id="quickstart" aria-labelledby="qs-title">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow reveal">Quickstart</p>
+            <h2 id="qs-title" class="reveal">Running in three commands.</h2>
+            <p class="lead reveal">
+              You need Node 20 or later and git. Milo runs as one Node process and keeps its data in
+              <code class="inline">data/milo.json</code> inside the project folder.
+            </p>
+          </div>
+
+          <div class="qs-grid">
+            <ol class="steps">
+              <li class="step reveal">
+                <span class="step-n mono" aria-hidden="true">1</span>
+                <div class="step-body">
+                  <h3>Clone the repository</h3>
+                  <div class="code-block">
+                    <pre><code>git clone https://github.com/kumarannathan/milo.git</code></pre>
+                    <button class="copy-btn" type="button" data-copy="git clone https://github.com/kumarannathan/milo.git" aria-label="Copy clone command">
+                      <svg class="icon icon-sm i-copy" aria-hidden="true"><use href="#i-copy" /></svg>
+                      <svg class="icon icon-sm i-check" aria-hidden="true"><use href="#i-check" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li class="step reveal">
+                <span class="step-n mono" aria-hidden="true">2</span>
+                <div class="step-body">
+                  <h3>Install dependencies</h3>
+                  <div class="code-block">
+                    <pre><code>cd milo &amp;&amp; npm install</code></pre>
+                    <button class="copy-btn" type="button" data-copy="cd milo && npm install" aria-label="Copy install command">
+                      <svg class="icon icon-sm i-copy" aria-hidden="true"><use href="#i-copy" /></svg>
+                      <svg class="icon icon-sm i-check" aria-hidden="true"><use href="#i-check" /></svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li class="step reveal">
+                <span class="step-n mono" aria-hidden="true">3</span>
+                <div class="step-body">
+                  <h3>Start Milo</h3>
+                  <div class="code-block">
+                    <pre><code>npm start</code></pre>
+                    <button class="copy-btn" type="button" data-copy="npm start" aria-label="Copy start command">
+                      <svg class="icon icon-sm i-copy" aria-hidden="true"><use href="#i-copy" /></svg>
+                      <svg class="icon icon-sm i-check" aria-hidden="true"><use href="#i-check" /></svg>
+                    </button>
+                  </div>
+                  <p class="step-note">
+                    Open <a href="http://localhost:4400" rel="noopener">http://localhost:4400</a>. Pick a playbook, then add your
+                    keys or turn on sample data.
+                  </p>
+                </div>
+              </li>
+            </ol>
+
+            <aside class="env card reveal" aria-labelledby="env-title">
+              <div class="card-head"><span class="card-title" id="env-title">Optional settings</span></div>
+              <p class="env-intro">Set these in <code class="inline">.env</code> or your shell.</p>
+              <dl class="env-list">
+                <div><dt class="mono">MILO_PORT</dt><dd>Port to listen on. Default 4400.</dd></div>
+                <div><dt class="mono">MILO_HOST</dt><dd>Address to bind. Default 127.0.0.1, so only your machine can reach it.</dd></div>
+                <div><dt class="mono">MILO_PASSWORD</dt><dd>Asks for a password. Set it before you expose Milo on a network.</dd></div>
+                <div><dt class="mono">MILO_DATA_DIR</dt><dd>Where <code class="inline">milo.json</code> lives. Default <code class="inline">data</code>.</dd></div>
+              </dl>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section" id="faq" aria-labelledby="faq-title">
+        <div class="container faq-wrap">
+          <div class="section-head">
+            <p class="eyebrow reveal">FAQ</p>
+            <h2 id="faq-title" class="reveal">Questions</h2>
+          </div>
+          <div class="faq">
+            <details class="reveal">
+              <summary>Does it send anything without me?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                Not by default. Sales development starts on Review sends only, so every email, reply and meeting invite waits
+                in Approvals. Markets starts on Review trades. Autopilot is opt-in, and SDR still escalates pricing, legal and
+                security questions to you.
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>Where are my keys stored?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                In <code class="inline">data/milo.json</code> on your machine, written so only your user can read it. A key is
+                sent only to the vendor you entered it for. Set <code class="inline">MILO_PASSWORD</code> before you expose
+                Milo on a network.
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>Can I use a local model?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                Yes. Add an Ollama connection and choose it for Write text, for one agent or all of them. Servers that speak
+                the OpenAI API work too, through an OpenAI connection with your own endpoint.
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>Is the trading real?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                No. Markets reads real prices and trades from Polymarket's public API, but every position is on paper. There is
+                no wallet, and no order is ever placed.
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>Can I try it without any keys?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                Yes. The built-in sample-data provider answers every capability with fake companies, people, markets and model
+                output. Switch each capability to a real connection when you are ready.
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>How do I add a provider?<svg class="icon icon-sm" aria-hidden="true"><use href="#i-plus" /></svg></summary>
+              <p>
+                Add a file to <code class="inline">server/providers</code> that exports an id, the fields it needs and a
+                handler for each capability it supports. Milo loads it on start.
+                <a href="https://github.com/kumarannathan/milo/blob/main/docs/capabilities.md" rel="noopener">docs/capabilities.md</a>
+                lists the arguments and results for every capability.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <a class="brand" href="#top" aria-label="Milo, back to top">
+            <span class="brand-mark" aria-hidden="true">M</span>
+            <span class="wordmark">Milo</span>
+          </a>
+          <p>Open-source control room for agent teams.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer">
+          <a href="https://github.com/kumarannathan/milo" rel="noopener">GitHub</a>
+          <a href="https://github.com/kumarannathan/milo#readme" rel="noopener">Docs</a>
+          <a href="https://github.com/kumarannathan/milo/blob/main/docs/capabilities.md" rel="noopener">Capabilities</a>
+          <a href="https://github.com/kumarannathan/milo/blob/main/LICENSE" rel="noopener">MIT license</a>
+        </nav>
+      </div>
+      <div class="container footer-small">
+        <p>
+          Released under the MIT license. Product names on this page belong to their owners; Milo is not affiliated with
+          them. Names and numbers in the previews are sample data.
+        </p>
+      </div>
+    </footer>
+
+    <div class="sr-only" aria-live="polite" data-live></div>
+  </body>
+</html>

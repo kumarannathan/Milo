@@ -1,0 +1,142 @@
+import { Component, useEffect, useState } from 'react';
+import { Sidebar, NAV } from './components/Sidebar.jsx';
+import { CommandPalette } from './components/CommandPalette.jsx';
+import { Button, Spinner } from './components/ui.jsx';
+import { useApp } from './lib/app-context.jsx';
+import { navigate, useRoute } from './lib/router.js';
+import ControlRoom from './pages/ControlRoom.jsx';
+import Approvals from './pages/Approvals.jsx';
+import Accounts from './pages/Accounts.jsx';
+import AccountDetail from './pages/AccountDetail.jsx';
+import Conversations from './pages/Conversations.jsx';
+import Markets from './pages/Markets.jsx';
+import MarketDetail from './pages/MarketDetail.jsx';
+import Positions from './pages/Positions.jsx';
+import Agents from './pages/Agents.jsx';
+import Connections from './pages/Connections.jsx';
+import Settings from './pages/Settings.jsx';
+import Setup from './pages/Setup.jsx';
+
+// Screens that manage their own scrolling columns.
+const FIXED = new Set(['approvals', 'conversations']);
+
+function pageFor(route) {
+  switch (route.page) {
+    case 'control-room':
+      return <ControlRoom />;
+    case 'approvals':
+      return <Approvals selectedId={route.id} />;
+    case 'accounts':
+      return route.id ? <AccountDetail id={route.id} /> : <Accounts />;
+    case 'conversations':
+      return <Conversations selectedId={route.id} />;
+    case 'markets':
+      return route.id ? <MarketDetail id={route.id} /> : <Markets />;
+    case 'positions':
+      return <Positions />;
+    case 'agents':
+      return <Agents agentId={route.id} />;
+    case 'connections':
+      return <Connections />;
+    case 'settings':
+      return <Settings />;
+    default:
+      return null;
+  }
+}
+
+function useTheme() {
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const toggle = () => {
+    const next = !dark;
+    document.documentElement.classList.toggle('dark', next);
+    try {
+      localStorage.setItem('milo_theme', next ? 'dark' : 'light');
+    } catch {}
+    setDark(next);
+  };
+  return [dark, toggle];
+}
+
+class ErrorBoundary extends Component {
+  state = { error: null };
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.resetKey !== this.props.resetKey && this.state.error) this.setState({ error: null });
+  }
+
+  render() {
+    if (!this.state.error) return this.props.children;
+    return (
+      <div className="page">
+        <div className="empty">
+          <span className="empty-title">This screen hit an error</span>
+          <span className="empty-text mono">{String(this.state.error.message ?? this.state.error)}</span>
+          <div className="empty-actions">
+            <Button variant="outline" onClick={() => this.setState({ error: null })}>
+              Try again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export function App() {
+  const route = useRoute();
+  const app = useApp();
+  const [dark, toggleTheme] = useTheme();
+
+  const allowed = app.playbook?.nav ?? [];
+  const page = allowed.includes(route.page) ? route.page : 'control-room';
+
+  useEffect(() => {
+    if (app.workspace && route.page !== page) navigate(`/${page}`, { replace: true });
+  }, [app.workspace, route.page, page]);
+
+  useEffect(() => {
+    const label = app.workspace ? NAV[page]?.label : 'Set up';
+    document.title = label ? `${label} · Milo` : 'Milo';
+  }, [page, app.workspace]);
+
+  if (!app.ready) {
+    return (
+      <div className="boot">
+        {app.error ? (
+          <span>Can’t reach the Milo server. Start it with npm start, then reload.</span>
+        ) : (
+          <>
+            <Spinner /> Loading
+          </>
+        )}
+      </div>
+    );
+  }
+
+  if (!app.workspace) return <Setup />;
+
+  return (
+    <div className="app">
+      <Sidebar active={page} dark={dark} onToggleTheme={toggleTheme} />
+      <CommandPalette dark={dark} onToggleTheme={toggleTheme} />
+      <div className={FIXED.has(page) ? 'main main-fixed' : 'main'}>
+        <ErrorBoundary resetKey={`${page}/${route.id ?? ''}`}>
+          <PageFrame key={`${page}/${route.id ?? ''}`}>{pageFor({ ...route, page })}</PageFrame>
+        </ErrorBoundary>
+      </div>
+    </div>
+  );
+}
+
+// Keyed per route so every screen fades in on navigation.
+function PageFrame({ children }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+  return children;
+}

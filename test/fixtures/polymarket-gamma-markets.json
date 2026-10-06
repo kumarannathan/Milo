@@ -1,0 +1,276 @@
+[
+  {
+    "id": "4906127",
+    "question": "US announces end of Iranian blockade by October 15, 2026?",
+    "conditionId": "0x1674c7a654ad25b68e9df7ac71e3711ecc5c86bde2063ceb8be586ea9c44f028",
+    "slug": "us-announces-end-of-iranian-blockade-by-october-15-2026",
+    "endDate": "2026-10-16T03:59:00Z",
+    "liquidity": "172832.9085",
+    "liquidityNum": 172832.9085,
+    "outcomes": "[\"Yes\", \"No\"]",
+    "outcomePrices": "[\"0.135\", \"0.865\"]",
+    "volume": "1393130.6169689994",
+    "volumeNum": 1393130.6169689994,
+    "volume24hr": 340610.58983900014,
+    "active": true,
+    "closed": false,
+    "acceptingOrders": true,
+    "lastTradePrice": 0.13,
+    "bestBid": 0.13,
+    "bestAsk": 0.14,
+    "umaResolutionStatuses": "[]",
+    "events": [
+      {
+        "id": "699735",
+        "slug": "us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+        "title": "US announces end of Iranian blockade by...?"
+      }
+    ],
+    "tags": [
+      {
+        "id": "2",
+        "label": "Politics",
+        "slug": "politics"
+      },
+      {
+        "id": "78",
+        "label": "Iran",
+        "slug": "iran"
+      },
+      {
+        "id": "126",
+        "label": "Trump",
+        "slug": "trump"
+      },
+      {
+        "id": "415",
+        "label": "Peace Deal",
+        "slug": "peace-deal"
+      },
+      {
+        "id": "583",
+        "label": "shipping",
+        "slug": "shipping"
+      },
+      {
+        "id": "100265",
+        "label": "Geopolitics",
+        "slug": "geopolitics"
+      },
+      {
+        "id": "104039",
+        "label": "U.S. x Iran",
+        "slug": "trump-iran"
+      },
+      {
+        "id": "104573",
+        "label": "Blockade",
+        "slug": "blockade"
+      }
+    ]
+  },
+  {
+    "id": "2589810",
+    "question": "Will the Fed decrease interest rates by 50+ bps after the October 2026 meeting?",
+    "conditionId": "0xa69ef420d8b4075ad8ba8611d02c63cb2ece46f5c8c643af223c272689b0c96f",
+    "slug": "will-the-fed-decrease-interest-rates-by-50-bps-after-the-october-2026-meeting-20260617190324029",
+    "endDate": "2026-10-29T03:59:00Z",
+    "liquidity": "835626.08889",
+    "liquidityNum": 835626.08889,
+    "outcomes": "[\"Yes\", \"No\"]",
+    "outcomePrices": "[\"0.0015\", \"0.9985\"]",
+    "volume": "4359132.736879",
+    "volumeNum": 4359132.736879,
+    "volume24hr": 251410.401,
+    "active": true,
+    "closed": false,
+    "acceptingOrders": true,
+    "lastTradePrice": 0.001,
+    "bestBid": 0.001,
+    "bestAsk": 0.002,
+    "umaResolutionStatuses": "[]",
+    "events": [
+      {
+        "id": "606422",
+        "slug": "fed-decision-in-october-20260617190323537",
+        "title": "Fed Decision in October?"
+      }
+    ],
+    "tags": [
+      {
+        "id": "101757",
+        "label": "Recurring",
+        "slug": "recurring"
+      },
+      {
+        "id": "159",
+        "label": "Fed",
+        "slug": "fed"
+      },
+      {
+        "id": "100478",
+        "label": "fomc",
+        "slug": "fomc"
+      },
+      {
+        "id": "126",
+        "label": "Trump",
+        "slug": "trump"
+      },
+      {
+        "id": "100328",
+        "label": "Economy",
+        "slug": "economy"
+      },
+      {
+        "id": "100196",
+        "label": "Fed Rates",
+        "slug": "fed-rates"
+      },
+      {
+        "id": "104088",
+        "label": "Kevin Warsh",
+        "slug": "kevin-warsh"
+      },
+      {
+        "id": "103176",
+        "label": "Global Rates",
+        "slug": "Global-Rates"
+      },
+      {
+        "id": "101800",
+        "label": "Economic Policy",
+        "slug": "economic-policy"
+      },
+      {
+        "id": "102000",
+        "label": "Macro Indicators",
+        "slug": "macro-indicators"
+      }
+    ]
+  },
+  {
+    "id": "608568",
+    "question": "Will Fabian Ruiz win the 2026 Ballon d'Or?",
+    "conditionId": "0x484252a68d9367df54f641765866693f16ac7a07d65d417bdbedc1c821d408f6",
+    "slug": "will-fabian-ruiz-win-the-2026-ballon-dor",
+    "endDate": "2026-10-31T00:00:00Z",
+    "liquidity": "180525.67374",
+    "liquidityNum": 180525.67374,
+    "outcomes": "[\"Yes\", \"No\"]",
+    "outcomePrices": "[\"0.0015\", \"0.9985\"]",
+    "volume": "2072529.3378429997",
+    "volumeNum": 2072529.3378429997,
+    "volume24hr": 158866.172,
+    "active": true,
+    "closed": false,
+    "acceptingOrders": true,
+    "lastTradePrice": 0.001,
+    "bestBid": 0.001,
+    "bestAsk": 0.002,
+    "umaResolutionStatuses": "[]",
+    "events": [
+      {
+        "id": "48361",
+        "slug": "ballon-dor-winner-2026",
+        "title": "Ballon d'Or Winner 2026"
+      }
+    ],
+    "tags": [
+      {
+        "id": "1",
+        "label": "Sports",
+        "slug": "sports"
+      },
+      {
+        "id": "18",
+        "label": "Awards",
+        "slug": "awards"
+      },
+      {
+        "id": "106280",
+        "label": "Ballon d'Or",
+        "slug": "ballon-dor"
+      },
+      {
+        "id": "100350",
+        "label": "Soccer",
+        "slug": "soccer"
+      }
+    ]
+  },
+  {
+    "id": "5342769",
+    "question": "Counter-Strike: Team Falcons vs Natus Vincere (BO3) - ESL Pro League Group Stage",
+    "conditionId": "0x16bf6187b713dc4c937599080f8063ba55beb46a6b3508e895d4f1114fd4fa48",
+    "slug": "cs2-fal2-navi-2026-10-06",
+    "endDate": "2026-10-07T01:15:00Z",
+    "liquidity": "1314336.1171",
+    "liquidityNum": 1314336.1171,
+    "outcomes": "[\"Team Falcons\", \"Natus Vincere\"]",
+    "outcomePrices": "[\"0.575\", \"0.425\"]",
+    "volume": "2422376.9700620044",
+    "volumeNum": 2422376.9700620044,
+    "volume24hr": 2458929.2195090004,
+    "active": true,
+    "closed": false,
+    "acceptingOrders": true,
+    "lastTradePrice": 0.58,
+    "bestBid": 0.57,
+    "bestAsk": 0.58,
+    "umaResolutionStatuses": "[]",
+    "events": [
+      {
+        "id": "1139329",
+        "slug": "cs2-fal2-navi-2026-10-06",
+        "title": "Counter-Strike: Team Falcons vs Natus Vincere (BO3) - ESL Pro League Group Stage"
+      }
+    ],
+    "tags": [
+      {
+        "id": "64",
+        "label": "Esports",
+        "slug": "esports"
+      },
+      {
+        "id": "100780",
+        "label": "counter strike 2",
+        "slug": "counter-strike-2"
+      },
+      {
+        "id": "100639",
+        "label": "Games",
+        "slug": "games"
+      },
+      {
+        "id": "1",
+        "label": "Sports",
+        "slug": "sports"
+      }
+    ]
+  },
+  {
+    "id": "3244610",
+    "question": "Will Andrew Bailey be the next Attorney General?",
+    "conditionId": "0x7ba05d259657e856a103b43c85357dcd2d5446fc056230b0e4eb20420af076d6",
+    "slug": "will-andrew-bailey-be-the-next-attorney-general-20260731142118983",
+    "endDate": "2029-01-19T23:59:00Z",
+    "outcomes": "[\"Yes\", \"No\"]",
+    "outcomePrices": "[\"0\", \"1\"]",
+    "volume": "591.944575",
+    "volumeNum": 591.944575,
+    "active": true,
+    "closed": true,
+    "acceptingOrders": false,
+    "bestAsk": 0.001,
+    "umaResolutionStatus": "resolved",
+    "umaResolutionStatuses": "[\"proposed\"]",
+    "events": [
+      {
+        "id": "777919",
+        "slug": "who-will-be-trumps-next-attorney-general-20260731141822084",
+        "title": "Who will be Trump's next Attorney General?"
+      }
+    ]
+  }
+]

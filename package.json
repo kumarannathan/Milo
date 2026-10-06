@@ -1,0 +1,32 @@
+{
+  "name": "milo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Open-source control room for autonomous agent teams. Sales development and prediction markets, with your own keys.",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "start": "node server/index.js",
+    "build": "vite build",
+    "build:site": "vite build --config vite.site.config.js",
+    "dev:site": "vite --config vite.site.config.js",
+    "test": "node --test test/",
+    "preview": "npm run build && npm start"
+  },
+  "dependencies": {
+    "imapflow": "^2.2.6",
+    "lucide-react": "^0.395.0",
+    "mailparser": "^3.9.36",
+    "nodemailer": "^10.0.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

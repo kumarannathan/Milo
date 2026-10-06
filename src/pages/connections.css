@@ -1,0 +1,12 @@
+.conn-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+.conn-list { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.conn-card { animation: rise-in var(--duration-slow) var(--ease-out) both; }
+.conn-card-main { display: flex; align-items: center; gap: 14px; padding: 16px 20px; }
+.conn-card-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; font: 400 13px/20px var(--font-sans); }
+.conn-card-title { display: flex; align-items: center; gap: 8px; }
+.conn-card-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.conn-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 20px; border-top: 1px solid var(--border); }
+.conn-users { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.conn-users .muted { margin-right: 4px; }
+.conn-side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
+.conn-model { display: flex; flex-direction: column; gap: 8px; }

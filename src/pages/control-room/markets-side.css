@@ -1,0 +1,48 @@
+/* Markets control room: right column */
+
+.ms-equity { display: flex; flex-direction: column; gap: 10px; padding: 16px 20px 14px; }
+.ms-equity-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ms-equity-value { font: 600 28px/32px var(--font-sans); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.ms-equity-pnl { font: 500 12px/16px var(--font-mono); white-space: nowrap; }
+.ms-equity-pnl .muted { font-family: var(--font-sans); font-weight: 400; }
+.ms-chart { margin: 4px 0 0; }
+.ms-equity-foot { display: flex; justify-content: space-between; gap: 12px; font: 400 11px/16px var(--font-sans); color: var(--muted-foreground); }
+
+.ms-empty { font: 400 12px/18px var(--font-sans); color: var(--muted-foreground); }
+.ms-empty-block { padding: 20px; font: 400 13px/20px var(--font-sans); color: var(--muted-foreground); text-wrap: pretty; }
+
+.ms-list { display: flex; flex-direction: column; }
+.ms-wait {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.ms-list > a + a { border-top: 1px solid var(--border); }
+.ms-wait:hover, .ms-pos:hover { background: var(--muted); color: var(--foreground); }
+.ms-wait-top { display: flex; align-items: center; gap: 8px; }
+.ms-wait-q { flex: 1; min-width: 0; font: 500 13px/20px var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-age { font: 400 11px/16px var(--font-mono); color: var(--muted-foreground); white-space: nowrap; }
+.ms-wait-sub { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.ms-wait-subject { font: 400 12px/16px var(--font-sans); color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-more { padding: 10px 20px; font: 500 12px/16px var(--font-sans); color: var(--muted-foreground); text-decoration: none; }
+.ms-more:hover { color: var(--foreground); }
+
+.ms-pos {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.ms-pos-q { font: 400 13px/20px var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms-pos-nums { display: flex; flex-direction: column; align-items: flex-end; }
+.ms-pos-value { font: 500 12px/16px var(--font-mono); font-variant-numeric: tabular-nums; }
+.ms-pos-pnl { font: 400 11px/14px var(--font-mono); }
+.ms-pos > .tag, .ms-wait-sub > .tag { min-width: 32px; justify-content: center; }
