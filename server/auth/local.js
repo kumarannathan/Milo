@@ -41,7 +41,7 @@ export function publicUser(u) {
 /**
  * @param {{ dir: string|null, secret?: string, secure?: boolean }} opts  dir null keeps users in memory.
  */
-export function createLocalAuth({ dir, secret, secure = false }) {
+export function createLocalAuth({ dir, secret, secure = false, signup = 'open' }) {
   const file = dir ? path.join(dir, 'users.json') : null;
   const secretFile = dir ? path.join(dir, '.session-secret') : null;
   let users = [];
@@ -133,6 +133,7 @@ export function createLocalAuth({ dir, secret, secure = false }) {
 
     registerRoutes(router) {
       router.post('/api/auth/signup', ({ body, res }) => {
+        if (signup === 'closed') throw new HttpError(403, 'Sign-up is closed. Ask the person who runs this Milo for an account.');
         const email = normEmail(body.email);
         checkPassword(body.password);
         if (users.some((u) => u.email === email)) throw new HttpError(409, 'An account with that email already exists. Sign in instead.');
@@ -158,7 +159,13 @@ export function createLocalAuth({ dir, secret, secure = false }) {
         return { user: publicUser(user) };
       });
 
-      router.post('/api/auth/signout', ({ res }) => {
+      router.post('/api/auth/signout', ({ req, res }) => {
+        // Bumping the version invalidates every cookie issued for this account, not just this one.
+        const user = req.user ? byId(req.user.id) : null;
+        if (user) {
+          user.sessionVersion = (user.sessionVersion ?? 0) + 1;
+          save();
+        }
         res.setHeader('Set-Cookie', cookie('', 0));
         return { ok: true };
       });

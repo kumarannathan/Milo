@@ -40,6 +40,7 @@ const app = await createApp({
   auth: authMode,
   authOpts: {
     secret: env.MILO_SESSION_SECRET,
+    signup: env.MILO_SIGNUP ?? 'open',
     secure: publicUrl.startsWith('https://'),
     supabase: { url: env.SUPABASE_URL, jwtSecret: env.SUPABASE_JWT_SECRET },
   },

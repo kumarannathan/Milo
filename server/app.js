@@ -89,6 +89,16 @@ export async function createApp({
         res.end('Not found. Run "npm run build" to build the app, or use "npm run dev".');
         return;
       }
+      // Cookie sessions need a CSRF check: writes must be JSON and, when a browser sends Origin, same-origin.
+      if (req.method !== 'GET' && req.method !== 'HEAD') {
+        const type = String(req.headers['content-type'] ?? '');
+        const origin = req.headers.origin;
+        const sameOrigin = !origin || origin === `${req.headers['x-forwarded-proto'] ?? 'http'}://${req.headers.host}` || origin.endsWith(`//${req.headers.host}`);
+        const hasBody = Number(req.headers['content-length'] ?? 0) > 0 || !!req.headers['transfer-encoding'];
+        if ((hasBody && !type.startsWith('application/json')) || !sameOrigin) {
+          return sendJson(res, 403, { error: 'Cross-site request blocked.' });
+        }
+      }
       req.user = auth.resolveUser(req);
       if (!req.user && !OPEN.has(pathname)) return sendJson(res, 401, { error: 'Sign in first.', code: 'signed_out' });
       const tenant = req.user ? tenants.for(req.user.id) : null;
