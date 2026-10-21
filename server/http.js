@@ -38,12 +38,19 @@ async function readBody(req, limit = 2 * 1024 * 1024) {
   }
 }
 
+export const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'same-origin',
+};
+
 export function sendJson(res, status, value) {
   const body = JSON.stringify(value);
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Content-Length': Buffer.byteLength(body),
     'Cache-Control': 'no-store',
+    ...SECURITY_HEADERS,
   });
   res.end(body);
 }
@@ -124,6 +131,7 @@ export function createStatic(root) {
     res.writeHead(200, {
       'Content-Type': MIME[ext] ?? 'application/octet-stream',
       'Cache-Control': immutable ? 'public, max-age=31536000, immutable' : 'no-cache',
+      ...SECURITY_HEADERS,
     });
     if (req.method === 'HEAD') return res.end(), true;
     fs.createReadStream(file).pipe(res);

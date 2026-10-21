@@ -1,12 +1,19 @@
-.conn-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
-.conn-list { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.conn-card { animation: rise-in var(--duration-slow) var(--ease-out) both; }
-.conn-card-main { display: flex; align-items: center; gap: 14px; padding: 16px 20px; }
-.conn-card-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; font: 400 13px/20px var(--font-sans); }
+.conn-body { max-width: 820px; gap: 12px; }
+.conn-list { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.conn-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px 14px 18px; }
+.conn-card-text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; font: 400 13px/20px var(--font-sans); }
 .conn-card-title { display: flex; align-items: center; gap: 8px; }
-.conn-card-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.conn-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 20px; border-top: 1px solid var(--border); }
-.conn-users { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.conn-users .muted { margin-right: 4px; }
-.conn-side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px; }
-.conn-model { display: flex; flex-direction: column; gap: 8px; }
+
+.conn-need { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: var(--radius-lg); background: var(--accent-soft); font: 400 13px/20px var(--font-sans); color: var(--lime-900); }
+.dark .conn-need { color: var(--lime-400); }
+.conn-need span { flex: 1; min-width: 0; }
+.conn-need b { font-weight: 600; }
+
+.conn-default { display: flex; align-items: center; gap: 16px; padding: 4px 0 8px; font: 400 13px/20px var(--font-sans); }
+.conn-default-select { width: 320px; }
+
+.row-menu { position: relative; flex-shrink: 0; }
+.row-menu-pop { position: absolute; right: 0; top: calc(100% + 4px); min-width: 140px; padding: 4px; border-radius: var(--radius-md); background: var(--background); box-shadow: var(--shadow-popover); display: flex; flex-direction: column; z-index: 6; animation: rise-in var(--duration-base) var(--ease-out); }
+.row-menu-item { padding: 7px 10px; border-radius: var(--radius-sm); font: 500 13px/20px var(--font-sans); text-align: left; }
+.row-menu-item:hover { background: var(--muted); }
+.row-menu-item.danger { color: var(--destructive); }

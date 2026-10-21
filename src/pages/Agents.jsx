@@ -12,10 +12,6 @@ import './agents.css';
 
 const STATUS_LABEL = { running: 'Running', idle: 'Idle', error: 'Error', off: 'Off', paused: 'Paused' };
 
-function list(items) {
-  return items?.length ? items.join(', ') : '—';
-}
-
 export default function Agents({ agentId }) {
   const { data } = useResource('/api/agents', ['agents', 'tasks', 'connections', 'workspace']);
   const agents = data?.agents ?? [];
@@ -77,19 +73,7 @@ function AgentDetail({ id }) {
               {STATUS_LABEL[status]}
             </StatusPill>
           </div>
-          <span className="agent-summary">
-            {agent.job}
-            {agent.consumes.length > 0 && (
-              <>
-                {' '}· picks up <code>{list(agent.consumes)}</code>
-              </>
-            )}
-            {agent.produces.length > 0 && (
-              <>
-                {' '}· hands off <code>{list(agent.produces)}</code>
-              </>
-            )}
-          </span>
+          <span className="agent-summary">{agent.job}</span>
         </div>
         <Switch checked={agent.enabled} label={agent.enabled ? 'On' : 'Off'} onChange={(on) => toggle(on)} />
         <Button variant="outline" icon={Play} onClick={() => runNow()} loading={running} disabled={agent.running}>
@@ -103,7 +87,6 @@ function AgentDetail({ id }) {
         <section className="card">
           <span className="card-label">Schedule</span>
           <span className="card-value">{agent.schedule.label}</span>
-          <span className="card-mono">{agent.schedule.type === 'cron' ? agent.schedule.cron : 'event-driven · no cron'}</span>
           <span className="card-foot">
             {agent.schedule.type === 'cron' && agent.nextRunAt
               ? `Next run ${formatTime(agent.nextRunAt)} (${formatIn(agent.nextRunAt, now)})${agent.lastRunAt ? ` · last ${formatTime(agent.lastRunAt)}` : ''}`
@@ -117,30 +100,15 @@ function AgentDetail({ id }) {
         </section>
 
         <section className="card">
-          <span className="card-label">Model</span>
-          {agent.usesModel ? (
+          <span className="card-label">{agent.usesModel ? 'Model and settings' : 'Settings'}</span>
+          {agent.usesModel && (
             <Select
               value={encodeModel(agent.model)}
               onChange={(v) => patch({ model: decodeModel(v) })}
               options={modelOptions(app.connections, app.providers, app.workspace)}
               aria-label="Model"
             />
-          ) : (
-            <div className="select-static">No model needed</div>
           )}
-          <span className="card-note">
-            {!agent.usesModel
-              ? 'This agent only calls connections.'
-              : agent.model?.override
-                ? 'Override for this agent.'
-                : agent.model
-                  ? 'Uses the workspace default. Pick a model to override it.'
-                  : 'Add a model under Connections.'}
-          </span>
-        </section>
-
-        <section className="card">
-          <span className="card-label">Config</span>
           {agent.config.slice(0, 4).map((f) => (
             <div key={f.key} className="config-row">
               <span className="config-key">{f.label}</span>
@@ -170,12 +138,9 @@ function AgentDetail({ id }) {
         <section className="panel">
           <div className="panel-head">
             <h2>What it needs</h2>
-            <span className="panel-hint">Agents ask for an action. You choose which connection does it.</span>
           </div>
           <div className="row row-head caps-grid">
             <span>Action</span>
-            <span>Capability</span>
-            <span>Need</span>
             <span>Connection</span>
             <span>Status</span>
           </div>
@@ -252,9 +217,10 @@ function CapabilityRow({ agent, cap, onBind }) {
 
   return (
     <div className="row caps-grid caps-row">
-      <span className="strong">{cap.label}</span>
-      <span className="cap-key">{cap.key}</span>
-      <span className="muted">{cap.required ? 'Required' : 'Optional'}</span>
+      <span className="strong cap-label">
+        {cap.label}
+        {!cap.required && <span className="muted small"> optional</span>}
+      </span>
       {isModel ? (
         <span className="truncate">
           {cap.connection ? (
@@ -296,17 +262,13 @@ function RunsPanel({ runs, now }) {
         <h2>Recent runs</h2>
       </div>
       {runs.length === 0 ? (
-        <EmptyState compact title="No runs yet">
-          Runs show up here with their duration, tokens and cost.
-        </EmptyState>
+        <EmptyState compact title="No runs yet" />
       ) : (
         <>
           <div className="row row-head runs-grid">
-            <span>Run</span>
             <span>Started</span>
             <span>Status</span>
             <span className="num">Duration</span>
-            <span className="num">Tokens in/out</span>
             <span className="num">Cost</span>
             <span>Result</span>
           </div>
@@ -316,15 +278,13 @@ function RunsPanel({ runs, now }) {
               const tone = live ? 'var(--success)' : r.status === 'ok' ? 'var(--success)' : 'var(--destructive)';
               return (
                 <div key={r.id} className={fresh(r) ? 'row runs-grid mono-row row-enter' : 'row runs-grid mono-row'}>
-                  <span className="muted truncate">{r.id}</span>
                   <span>{formatShort(r.startedAt, new Date(now))}</span>
                   <span className="status-cell sans">
                     <Dot color={tone} pulse={live} />
                     {live ? 'Running' : r.status === 'ok' ? 'OK' : 'Error'}
                   </span>
                   <span className="num">{live ? '…' : formatDuration(r.durationMs)}</span>
-                  <span className="num">{r.tokensIn || r.tokensOut ? `${formatNumber(r.tokensIn)} / ${formatNumber(r.tokensOut)}` : '—'}</span>
-                  <span className="num">{formatCost(r.costUsd)}</span>
+                  <span className="num" title={r.tokensIn || r.tokensOut ? `${formatNumber(r.tokensIn)} in / ${formatNumber(r.tokensOut)} out` : undefined}>{formatCost(r.costUsd)}</span>
                   <span className={r.status === 'error' ? 'run-result error-text' : 'run-result muted'} title={r.summary}>
                     {live ? 'In progress' : r.summary || '—'}
                   </span>
@@ -345,9 +305,7 @@ function ToolCallsPanel({ calls }) {
         <h2>Recent tool calls</h2>
       </div>
       {calls.length === 0 ? (
-        <EmptyState compact title="No tool calls yet">
-          Every call to a connection is listed with its status and latency.
-        </EmptyState>
+        <EmptyState compact title="No tool calls yet" />
       ) : (
         <div className="rows">
           {calls.map((t) => {
@@ -406,7 +364,6 @@ function ScheduleDialog({ open, agent, onClose, onSave }) {
       open={open}
       onClose={onClose}
       title={`${agent.name} schedule`}
-      description="Event-driven agents run as soon as work is queued for them."
       footer={
         <>
           {agent.schedule.overridden && (
@@ -425,7 +382,7 @@ function ScheduleDialog({ open, agent, onClose, onSave }) {
         <Select value={choice} onChange={setChoice} options={SCHEDULE_PRESETS} />
       </Field>
       {choice === 'custom' && (
-        <Field label="Cron expression" help="Five fields: minute, hour, day of month, month, day of week. Uses this machine’s time zone.">
+        <Field label="Cron expression">
           <Input className="mono" value={cron} onChange={(e) => setCron(e.target.value)} placeholder="*/30 * * * *" />
         </Field>
       )}
@@ -496,7 +453,6 @@ function InstructionsDialog({ open, agent, onClose, onSave }) {
       open={open}
       onClose={onClose}
       title={`${agent.name} instructions`}
-      description={`Added to every prompt ${agent.name} sends to its model. Use it for tone, things to avoid, or facts about your business.`}
       width={600}
       footer={
         <>

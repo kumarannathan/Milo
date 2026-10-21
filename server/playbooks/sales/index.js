@@ -13,7 +13,7 @@ export default {
   name: 'Sales development',
   tagline: 'Find accounts, research them, write outreach you approve, book meetings.',
   agents: [scout, researcher, prospector, qualifier, personalizer, sdr, crm],
-  nav: ['control-room', 'approvals', 'accounts', 'conversations', 'agents', 'connections', 'settings'],
+  nav: ['control-room', 'approvals', 'accounts', 'conversations', 'agents', 'connections', 'account'],
 
   autonomy: [
     {

@@ -160,7 +160,7 @@ export default function Accounts() {
         <div className="page-header-text">
           <h1>Accounts</h1>
           <div className="page-sub">
-            {!data ? ' ' : nothingAtAll ? 'Companies your team finds show up here.' : `${plural(everyone.current ?? counts.all ?? total, 'company', 'companies')} · ${formatNumber(data.foundToday ?? 0)} found today`}
+            {!data ? ' ' : nothingAtAll ? ' ' : `${plural(everyone.current ?? counts.all ?? total, 'company', 'companies')} · ${formatNumber(data.foundToday ?? 0)} found today`}
           </div>
         </div>
         <Button variant="outline" icon={Upload} onClick={() => setImporting(true)}>
@@ -241,9 +241,7 @@ export default function Accounts() {
             </>
           }
         >
-          {scout?.schedule?.type === 'cron'
-            ? `Scout runs ${scout.schedule.label.toLowerCase()} and adds companies that match your ICP.${scout.nextRunAt ? ` The next run is at ${formatTime(scout.nextRunAt)}, or run it now.` : ' Run it now to get started.'}`
-            : 'Scout adds companies that match your ICP. Run it now, or import a CSV.'}
+          {scout?.nextRunAt ? `Scout runs next at ${formatTime(scout.nextRunAt)}.` : null}
         </EmptyState>
       ) : board ? (
         <Board rows={rows} counts={counts} loading={!data} outreachAt={outreach} filtered={activeFilters > 0 || !!query} onOpenStage={(s) => {

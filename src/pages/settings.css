@@ -1,9 +1,0 @@
-.settings { max-width: 880px; }
-.settings .panel-body { display: flex; flex-direction: column; gap: 16px; }
-.settings-sections { display: flex; flex-direction: column; gap: 24px; }
-.settings-actions { display: flex; justify-content: flex-end; }
-.settings-row { display: flex; align-items: center; gap: 16px; }
-.settings-row + .settings-row { padding-top: 16px; border-top: 1px solid var(--border); }
-.settings-row-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; font: 400 13px/20px var(--font-sans); }
-.settings-num { width: 80px; }
-.danger-panel { box-shadow: 0 0 0 1px color-mix(in srgb, var(--destructive) 40%, var(--border)); }

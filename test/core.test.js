@@ -90,7 +90,7 @@ test('api: setup, agents, connections and validation', async () => {
     assert.equal((await call('GET', '/api/agents')).body.agents.find((a) => a.id === 'researcher').status, 'paused');
 
     const meta = (await call('GET', '/api/meta')).body;
-    assert.deepEqual(meta.playbooks.map((p) => p.id).sort(), ['markets', 'sales']);
+    assert.deepEqual(meta.playbooks.map((p) => p.id), ['sales']);
     assert.ok(meta.providers.some((p) => p.id === 'demo'));
 
     assert.equal((await call('DELETE', '/api/workspace', { confirm: 'wrong' })).status, 400);

@@ -46,9 +46,7 @@ export function ApprovalList({ tab, items, all, loading, selectedId, checked, le
             </div>
           ))
         ) : items.length === 0 && all.length === 0 ? (
-          <EmptyState compact title={tab === 'approved' ? 'Nothing approved yet' : tab === 'rejected' ? 'Nothing rejected' : 'Queue is empty'}>
-            {tab === 'approved' ? 'Items you approve are listed here with when they went out.' : tab === 'rejected' ? 'Rejected drafts and the notes you left are listed here.' : null}
-          </EmptyState>
+          <EmptyState compact title={tab === 'approved' ? 'Nothing approved yet' : tab === 'rejected' ? 'Nothing rejected' : 'Queue is empty'} />
         ) : (
           all.map((a) => (
             <ApprovalRow

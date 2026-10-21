@@ -18,7 +18,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function start() {
   const errors = [];
-  const app = await createApp({ dataDir: null, staticDir: null, log: { error: (...args) => errors.push(args) } });
+  const app = await createApp({ dataDir: null, staticDir: null, playbooks: ['sales', 'markets'], log: { error: (...args) => errors.push(args) } });
   await new Promise((resolve) => app.server.listen(0, '127.0.0.1', resolve));
   const base = `http://127.0.0.1:${app.server.address().port}`;
   const call = async (method, path, body) => {

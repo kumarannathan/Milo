@@ -77,19 +77,14 @@ export default function Conversations({ selectedId }) {
       <header className="page-header">
         <div className="page-header-text">
           <h1>Conversations</h1>
-          <div className="page-sub">
-            SDR reads every reply{sender ? ` in ${sender}` : ''}, tags the intent, and hands anything it can’t answer to a person.
-          </div>
+          {sender && <div className="page-sub">{sender}</div>}
         </div>
       </header>
 
       {list.error && !list.data ? (
         <ErrorState error={list.error} onRetry={list.refresh} />
       ) : empty ? (
-        <EmptyState icon={MessageSquare} title="No conversations yet">
-          Threads start when someone replies to an email you approved.{' '}
-          {sdr?.schedule?.type === 'cron' ? `SDR checks the inbox ${sdr.schedule.label.toLowerCase()}.` : 'SDR checks the inbox on its schedule.'}
-        </EmptyState>
+        <EmptyState icon={MessageSquare} title="No replies yet" />
       ) : (
         <div className="cv-grid">
           <section className="cv-list" aria-label="Threads">
@@ -142,9 +137,7 @@ function ThreadList({ threads, loading, currentId, onSelect, isFresh, now, filte
     const label = FILTERS.find(([v]) => v === filter)?.[1]?.toLowerCase();
     return (
       <div className="cv-list-scroll">
-        <EmptyState compact title={`Nothing ${label}`}>
-          {filter === 'us' ? 'Every reply has an answer.' : filter === 'escalated' ? 'SDR hasn’t handed anything to a person.' : null}
-        </EmptyState>
+        <EmptyState compact title={`Nothing ${label}`} />
       </div>
     );
   }
@@ -515,7 +508,7 @@ function OwnerBlock({ thread, agents }) {
           <Mono size="md">{agentMono(agents.byId, 'sdr')}</Mono>
           <div className="cv-owner-text">
             <span className="cv-owner-name">{agentName(agents.byId, 'sdr') || 'SDR'}</span>
-            <span className="cv-owner-sub">{thread.status === 'closed' ? 'Thread closed' : 'Answers and books meetings on its own'}</span>
+            <span className="cv-owner-sub">{thread.status === 'closed' ? 'Closed' : 'Handling replies'}</span>
           </div>
         </div>
       )}

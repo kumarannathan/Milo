@@ -28,9 +28,6 @@ export function RejectPanel({ trade, author, note, onChange, onCancel }) {
           Cancel
         </button>
       </div>
-      <span className="ap-reject-help">
-        {author} reads your note and uses it on {trade ? 'the next trades it proposes' : 'the next drafts for this team'}.
-      </span>
       <textarea
         ref={ref}
         className="input textarea ap-reject-input"

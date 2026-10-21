@@ -28,9 +28,7 @@ export default function AccountDetail({ id }) {
       <div className="page">
         <Crumbs name="Not found" />
         {res.error.status === 404 ? (
-          <EmptyState title="This account isn’t here" actions={<a href="#/accounts">Back to accounts</a>}>
-            It may have been removed, or the link is out of date.
-          </EmptyState>
+          <EmptyState title="This account isn’t here" actions={<a href="#/accounts">Back to accounts</a>} />
         ) : (
           <ErrorState error={res.error} onRetry={res.refresh} />
         )}
@@ -260,13 +258,7 @@ function BriefPanel({ account: a, agents }) {
         {b && <span className="ad-meta-mono">{['Researcher', b.model, b.at ? formatDateTime(b.at) : null].filter(Boolean).join(' · ')}</span>}
       </div>
       {!b ? (
-        <EmptyState compact title="Researcher hasn’t written a brief yet.">
-          {a.stage === 'disqualified'
-            ? 'This account is disqualified, so it won’t be researched.'
-            : researcher?.running
-              ? 'Researcher is working right now. The brief shows up here when it’s done.'
-              : 'New accounts are researched in the order they’re found. Re-run research to move this one up.'}
-        </EmptyState>
+        <EmptyState compact title={a.stage === 'disqualified' ? 'Disqualified, so no brief' : researcher?.running ? 'Researcher is working on it' : 'No brief yet'} />
       ) : (
         <div className="ad-brief">
           {b.summary && <p className="ad-summary">{b.summary}</p>}

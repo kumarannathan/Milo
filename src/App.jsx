@@ -3,22 +3,22 @@ import { Sidebar, NAV } from './components/Sidebar.jsx';
 import { CommandPalette } from './components/CommandPalette.jsx';
 import { Button, Spinner } from './components/ui.jsx';
 import { useApp } from './lib/app-context.jsx';
+import { useAuth } from './lib/auth.jsx';
 import { navigate, useRoute } from './lib/router.js';
 import ControlRoom from './pages/ControlRoom.jsx';
 import Approvals from './pages/Approvals.jsx';
 import Accounts from './pages/Accounts.jsx';
 import AccountDetail from './pages/AccountDetail.jsx';
 import Conversations from './pages/Conversations.jsx';
-import Markets from './pages/Markets.jsx';
-import MarketDetail from './pages/MarketDetail.jsx';
-import Positions from './pages/Positions.jsx';
 import Agents from './pages/Agents.jsx';
 import Connections from './pages/Connections.jsx';
-import Settings from './pages/Settings.jsx';
-import Setup from './pages/Setup.jsx';
+import Account from './pages/Account.jsx';
+import Onboarding from './pages/Onboarding.jsx';
+import AuthScreen from './pages/auth/AuthScreen.jsx';
 
 // Screens that manage their own scrolling columns.
 const FIXED = new Set(['approvals', 'conversations']);
+const AUTH_PAGES = new Set(['signin', 'signup', 'reset']);
 
 function pageFor(route) {
   switch (route.page) {
@@ -30,16 +30,12 @@ function pageFor(route) {
       return route.id ? <AccountDetail id={route.id} /> : <Accounts />;
     case 'conversations':
       return <Conversations selectedId={route.id} />;
-    case 'markets':
-      return route.id ? <MarketDetail id={route.id} /> : <Markets />;
-    case 'positions':
-      return <Positions />;
     case 'agents':
       return <Agents agentId={route.id} />;
     case 'connections':
       return <Connections />;
-    case 'settings':
-      return <Settings />;
+    case 'account':
+      return <Account />;
     default:
       return null;
   }
@@ -87,38 +83,44 @@ class ErrorBoundary extends Component {
   }
 }
 
+function Boot({ children }) {
+  return <div className="boot">{children}</div>;
+}
+
 export function App() {
   const route = useRoute();
+  const auth = useAuth();
   const app = useApp();
   const [dark, toggleTheme] = useTheme();
 
   const allowed = app.playbook?.nav ?? [];
-  const page = allowed.includes(route.page) ? route.page : 'control-room';
+  const page = allowed.includes(route.page) || (route.page === 'account' && app.workspace) ? route.page : 'control-room';
 
   useEffect(() => {
-    if (app.workspace && route.page !== page) navigate(`/${page}`, { replace: true });
+    if (app.workspace && !AUTH_PAGES.has(route.page) && route.page !== page) navigate(`/${page}`, { replace: true });
   }, [app.workspace, route.page, page]);
 
   useEffect(() => {
-    const label = app.workspace ? NAV[page]?.label : 'Set up';
+    const label = !auth.user ? 'Sign in' : app.workspace ? NAV[page]?.label : 'Welcome';
     document.title = label ? `${label} · Milo` : 'Milo';
-  }, [page, app.workspace]);
+  }, [page, app.workspace, auth.user]);
 
-  if (!app.ready) {
+  if (auth.loading || !app.ready) {
     return (
-      <div className="boot">
-        {app.error ? (
+      <Boot>
+        {auth.error || app.error ? (
           <span>Can’t reach the Milo server. Start it with npm start, then reload.</span>
         ) : (
           <>
             <Spinner /> Loading
           </>
         )}
-      </div>
+      </Boot>
     );
   }
 
-  if (!app.workspace) return <Setup />;
+  if (!auth.user) return <AuthScreen mode={AUTH_PAGES.has(route.page) ? route.page : 'signin'} />;
+  if (!app.workspace) return <Onboarding />;
 
   return (
     <div className="app">

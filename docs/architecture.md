@@ -1,11 +1,13 @@
 # Architecture
 
-Milo is one Node process that serves the API, runs the agents, and serves the built web app. There is no database server: everything lives in a single JSON file.
+Milo is one Node process that serves the API, runs the agents, and serves the built web app. Each signed-in account gets its own tenant: a JSON store, a runner and an event bus, created on first request and unloaded when idle.
 
 ```
-browser ──HTTP/SSE──▶ server/app.js ──▶ api/*            REST routes
+browser ──HTTP/SSE──▶ server/app.js ──▶ auth/*           who is this? (cookie or Supabase JWT)
+                                    ──▶ tenants.js       store + runner + bus for that account
+                                    ──▶ api/*            REST routes (run against the request's tenant)
                                     ──▶ runner/runner.js  schedules and runs agents
-                                    ──▶ store.js          data/milo.json
+                                    ──▶ store.js          data/tenants/<user>/milo.json
 runner ──ctx──▶ agent.run(ctx) ──ctx.call(capability)──▶ providers/<vendor>.js ──▶ vendor API
 ```
 
@@ -14,7 +16,9 @@ runner ──ctx──▶ agent.run(ctx) ──ctx.call(capability)──▶ pro
 | Path | What it does |
 | --- | --- |
 | `server/index.js` | Entry point. Reads `.env`, starts the HTTP server and the runner. |
-| `server/app.js` | Wires the store, event bus, runner and routes. Optional basic auth. |
+| `server/app.js` | Resolves the user, picks their tenant, and runs the routes inside an `AsyncLocalStorage` scope so handlers see that tenant's store/runner/bus. |
+| `server/auth/` | `local` (scrypt passwords in `data/users.json`, signed cookie), `supabase` (verifies Supabase JWTs), `none` (single built-in user). |
+| `server/tenants.js` | One store, runner and event bus per user. |
 | `server/store.js` | In-memory collections persisted to `data/milo.json` (debounced, atomic writes, file mode 600). Emits the names of changed collections. |
 | `server/events.js` | Server-sent events. The UI subscribes once and refetches the collections that changed. |
 | `server/runner/` | The scheduler, the per-run context agents receive, and capability routing. |
@@ -64,8 +68,8 @@ Agents never call a vendor directly. They ask for a capability (`ctx.call('email
 
 ## Approvals
 
-Anything that leaves your machine on your behalf (emails, replies, meeting invites) or places a trade becomes an approval first, unless you raise the autonomy level in Settings. Approving runs the playbook's `approve` hook, which queues the send or opens the position. Rejecting stores your note, and the writing agent includes recent notes in its next prompts.
+Anything that leaves your machine on your behalf (emails, replies, meeting invites) or places a trade becomes an approval first, unless you raise the autonomy level under Account. Approving runs the playbook's `approve` hook, which queues the send or opens the position. Rejecting stores your note, and the writing agent includes recent notes in its next prompts.
 
 ## Data
 
-`data/milo.json` holds the workspace, connections (including keys), agent state, tasks, runs, tool calls, activity and the playbook's records. Old runs, tool calls and activity are trimmed automatically. Delete the file (or use Settings → Reset) to start over.
+`data/tenants/<user>/milo.json` holds that account's workspace, connections (including keys), agent state, tasks, runs, tool calls, activity and the playbook's records. Old runs, tool calls and activity are trimmed automatically. Delete the file (or use Account → Reset) to start over.

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Plus, RefreshCw } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { MoreHorizontal, Plus } from 'lucide-react';
 import { api } from '../lib/api.js';
 import { useApp } from '../lib/app-context.jsx';
 import { useNow, useResource } from '../lib/live.js';
@@ -7,9 +7,11 @@ import { formatAgoLong } from '../lib/format.js';
 import { tagFor } from '../lib/tags.js';
 import { ConfirmDialog, Dialog, useAction } from '../components/feedback.jsx';
 import { ConnectionForm, ProviderPicker } from '../components/ConnectionForm.jsx';
-import { Banner, Button, EmptyState, Mono, PageHeader, Select, SkeletonRows, Tag } from '../components/ui.jsx';
+import { Button, EmptyState, PageHeader, Select, SkeletonRows, StatusPill } from '../components/ui.jsx';
 import { modelOptions } from './agents-shared.js';
 import './connections.css';
+
+const DOT = { ok: 'var(--success)', untested: 'var(--idle)', expired: 'var(--destructive)', error: 'var(--destructive)' };
 
 export default function Connections() {
   const app = useApp();
@@ -26,53 +28,61 @@ export default function Connections() {
   const providerById = Object.fromEntries(app.providers.map((p) => [p.id, p]));
   const agentList = agents.data?.agents ?? [];
   const agentById = Object.fromEntries(agentList.map((a) => [a.id, a]));
-  const broken = connections.filter((c) => c.status === 'expired' || c.status === 'error');
 
   const [test] = useAction((id) => api.post(`/api/connections/${id}/test`), {
     success: (r) => (r.connection.status === 'ok' ? `${r.connection.label} is working.` : `${r.connection.label}: ${r.connection.lastError?.message ?? 'test failed'}`),
   });
-  const [remove, removingBusy] = useAction((id) => api.del(`/api/connections/${id}`), {
-    success: 'Connection removed.',
-    onDone: () => setRemoving(null),
-  });
+  const [remove, removingBusy] = useAction((id) => api.del(`/api/connections/${id}`), { success: 'Connection removed.', onDone: () => setRemoving(null) });
   const [setDefaultModel] = useAction((value) => {
     const [connectionId, ...rest] = value.split('::');
     return api.patch('/api/workspace', { defaultModel: value ? { connectionId, model: rest.join('::') } : null });
   }, { success: 'Default model saved.' });
 
-  // Every capability enabled agents use, and which connection serves it.
-  const coverage = new Map();
+  // What enabled agents still need: one line per missing action, with the agents that want it.
+  const missing = new Map();
   for (const a of agentList) {
     if (!a.enabled) continue;
     for (const c of a.capabilities) {
-      const entry = coverage.get(c.key) ?? { key: c.key, label: c.label, required: false, agents: [], conns: new Set(), statuses: new Set() };
-      entry.required ||= c.required;
-      entry.agents.push(a);
-      if (c.connection) entry.conns.add(c.connection.label);
-      entry.statuses.add(c.status);
-      coverage.set(c.key, entry);
+      if (c.status !== 'missing') continue;
+      const m = missing.get(c.key) ?? { key: c.key, label: c.label, agents: [] };
+      m.agents.push(a.name);
+      missing.set(c.key, m);
     }
   }
+  const needed = new Set(missing.keys());
 
   const ws = app.workspace;
+  const models = connections.filter((c) => c.capabilities.includes('llm.complete'));
   const defaultValue = ws.defaultModel ? `${ws.defaultModel.connectionId}::${ws.defaultModel.model ?? ''}` : '';
   const modelOpts = modelOptions(connections, app.providers, null).map((o) => (o.value === '' ? { value: '', label: 'First model connection' } : o));
 
   return (
     <div className="page">
-      <PageHeader title="Connections" sub="Keys stay on this machine. One connection can serve several actions, and you choose which one each agent uses.">
+      <PageHeader title="Connections" sub={conns.data ? `${connections.length} connected` : undefined}>
         <Button icon={Plus} onClick={() => setAdding(true)}>
-          Add connection
+          Add
         </Button>
       </PageHeader>
 
-      {broken.length > 0 && (
-        <Banner tone="error">
-          <b>{broken.map((c) => c.label).join(', ')}</b> {broken.length === 1 ? 'needs' : 'need'} attention. Agents that use {broken.length === 1 ? 'it' : 'them'} hold their work until you reconnect.
-        </Banner>
-      )}
+      <div className="page-body conn-body">
+        {missing.size > 0 && (
+          <div className="conn-need">
+            <span>
+              Your agents still need connections to <b>{[...missing.values()].map((m) => m.label.toLowerCase()).join(', ')}</b>.
+            </span>
+            <Button size="sm" onClick={() => setAdding(true)}>
+              Add
+            </Button>
+          </div>
+        )}
 
-      <div className="page-body conn-layout">
+        {models.length > 1 && (
+          <div className="conn-default">
+            <span className="strong">Default model</span>
+            <Select value={defaultValue} onChange={setDefaultModel} options={modelOpts} aria-label="Default model" className="conn-default-select" />
+          </div>
+        )}
+
         <div className="conn-list">
           {!conns.data ? (
             <div className="panel">
@@ -80,104 +90,44 @@ export default function Connections() {
             </div>
           ) : connections.length === 0 ? (
             <div className="panel">
-              <EmptyState title="No connections yet" actions={<Button icon={Plus} onClick={() => setAdding(true)}>Add connection</Button>}>
-                Add a model and the services your agents need. Each one is tested when you save it.
-              </EmptyState>
+              <EmptyState title="No connections yet" actions={<Button icon={Plus} onClick={() => setAdding(true)}>Add a connection</Button>} />
             </div>
           ) : (
-            connections.map((c, i) => {
+            connections.map((c) => {
               const t = tagFor('connection', c.status);
-              const users = [...new Set(c.usedBy.map((u) => u.agentId))];
+              const users = [...new Set(c.usedBy.map((u) => agentById[u.agentId]?.name).filter(Boolean))];
+              const p = providerById[c.provider];
+              const detail =
+                c.status === 'ok' || !c.lastError
+                  ? [c.account, c.lastCheckedAt && `checked ${formatAgoLong(c.lastCheckedAt, now)} ago`].filter(Boolean).join(' · ')
+                  : c.lastError.message;
               return (
-                <section key={c.id} className="panel conn-card" style={{ animationDelay: `${i * 30}ms` }}>
-                  <div className="conn-card-main">
-                    <span className="provider-mark">{(providerById[c.provider]?.name ?? c.label).slice(0, 2)}</span>
-                    <div className="conn-card-text">
-                      <div className="conn-card-title">
-                        <span className="strong">{c.label}</span>
-                        {c.label !== c.providerName && <span className="muted">{c.providerName}</span>}
-                        <Tag color={t.color}>{t.label}</Tag>
-                      </div>
-                      <span className="muted small">
-                        {c.status === 'ok' || !c.lastError ? c.account || '—' : c.lastError.message}
-                        {c.lastCheckedAt && ` · checked ${formatAgoLong(c.lastCheckedAt, now)} ago`}
-                      </span>
+                <section key={c.id} className="panel conn-card">
+                  <span className="provider-mark">{(p?.name ?? c.label).slice(0, 2)}</span>
+                  <div className="conn-card-text">
+                    <div className="conn-card-title">
+                      <span className="strong">{c.label}</span>
+                      {c.label !== c.providerName && <span className="muted">{c.providerName}</span>}
+                      <StatusPill color={DOT[c.status] ?? DOT.untested}>{t.label}</StatusPill>
                     </div>
-                    <div className="conn-card-actions">
-                      <Button variant="ghost" size="sm" icon={RefreshCw} onClick={() => test(c.id)}>
-                        Test
-                      </Button>
-                      {providerById[c.provider]?.fields.length > 0 && (
-                        <Button variant="outline" size="sm" onClick={() => setEditing(c)}>
-                          Edit
-                        </Button>
-                      )}
-                      <Button variant="ghost" size="sm" onClick={() => setRemoving(c)}>
-                        Remove
-                      </Button>
-                    </div>
+                    <span className={c.status === 'ok' || !c.lastError ? 'muted small truncate' : 'error-text small truncate'}>{detail || '—'}</span>
+                    <span className="muted small truncate">
+                      {c.capabilities.length} {c.capabilities.length === 1 ? 'action' : 'actions'}
+                      {users.length ? ` · used by ${users.join(', ')}` : ' · not used yet'}
+                    </span>
                   </div>
-                  <div className="conn-card-foot">
-                    <div className="cap-tags">
-                      {c.capabilities.map((k) => (
-                        <Tag key={k} color="gray">
-                          {k}
-                        </Tag>
-                      ))}
-                    </div>
-                    {users.length > 0 ? (
-                      <span className="conn-users" title={users.map((id) => agentById[id]?.name ?? id).join(', ')}>
-                        <span className="muted small">Used by</span>
-                        {users.map((id) => (
-                          <Mono key={id} size="xs">
-                            {agentById[id]?.mono ?? '··'}
-                          </Mono>
-                        ))}
-                      </span>
-                    ) : (
-                      <span className="muted small">Not used by any agent</span>
-                    )}
-                  </div>
+                  <RowMenu
+                    items={[
+                      { label: 'Test', run: () => test(c.id) },
+                      p?.fields.length > 0 && { label: 'Edit', run: () => setEditing(c) },
+                      { label: 'Remove', run: () => setRemoving(c), danger: true },
+                    ].filter(Boolean)}
+                  />
                 </section>
               );
             })
           )}
         </div>
-
-        <aside className="conn-side">
-          <section className="panel">
-            <div className="panel-head">
-              <h2>Default model</h2>
-            </div>
-            <div className="panel-body conn-model">
-              <Select value={defaultValue} onChange={setDefaultModel} options={modelOpts} aria-label="Default model" />
-              <span className="muted small">Agents use this unless you pick a model for them on the Agents screen.</span>
-            </div>
-          </section>
-
-          <section className="panel">
-            <div className="panel-head">
-              <h2>Coverage</h2>
-              <span className="panel-hint">For agents that are on</span>
-            </div>
-            <div className="rows">
-              {[...coverage.values()].map((r) => {
-                const status = r.statuses.has('expired') ? 'expired' : r.statuses.has('missing') ? 'missing' : r.statuses.has('connected') ? 'connected' : 'skipped';
-                const t = tagFor('connection', status);
-                return (
-                  <div key={r.key} className="row coverage-row">
-                    <span className="coverage-text">
-                      <span className="strong">{r.label}</span>
-                      <span className="muted small truncate">{r.conns.size ? [...r.conns].join(', ') : r.agents.map((a) => a.name).join(', ')}</span>
-                    </span>
-                    <Tag color={t.color}>{status === 'skipped' && !r.required ? 'Optional' : t.label}</Tag>
-                  </div>
-                );
-              })}
-              {coverage.size === 0 && <div className="panel-body muted small">Turn on an agent to see what it needs.</div>}
-            </div>
-          </section>
-        </aside>
       </div>
 
       <Dialog
@@ -186,8 +136,7 @@ export default function Connections() {
           setAdding(false);
           setProvider(null);
         }}
-        title={provider ? `Connect ${provider.name}` : 'Add connection'}
-        description={provider ? null : 'Pick a service. You can add more than one of each, for example two inboxes.'}
+        title={provider ? `Connect ${provider.name}` : 'Add a connection'}
         width={provider ? 560 : 760}
       >
         {provider ? (
@@ -202,14 +151,12 @@ export default function Connections() {
             }}
           />
         ) : (
-          <ProviderPicker providers={providers} connections={connections} needed={new Set([...coverage.values()].filter((r) => r.statuses.has('missing')).map((r) => r.key))} onPick={setProvider} />
+          <ProviderPicker providers={providers} connections={connections} needed={needed} onPick={setProvider} />
         )}
       </Dialog>
 
       <Dialog open={!!editing} onClose={() => setEditing(null)} title={editing ? `Edit ${editing.label}` : ''} width={560}>
-        {editing && (
-          <ConnectionForm provider={providerById[editing.provider]} connection={editing} onCancel={() => setEditing(null)} onSaved={() => setEditing(null)} />
-        )}
+        {editing && <ConnectionForm provider={providerById[editing.provider]} connection={editing} onCancel={() => setEditing(null)} onSaved={() => setEditing(null)} />}
       </Dialog>
 
       <ConfirmDialog
@@ -219,9 +166,45 @@ export default function Connections() {
         busy={removingBusy}
         destructive
         title={removing ? `Remove ${removing.label}?` : ''}
-        description="Agents that use it switch to another connection that can do the same thing, or stop until you add one."
+        description="Agents that use it stop until another connection can do the same thing."
         confirmLabel="Remove"
       />
+    </div>
+  );
+}
+
+function RowMenu({ items }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const close = (e) => !ref.current?.contains(e.target) && setOpen(false);
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [open]);
+  return (
+    <div className="row-menu" ref={ref}>
+      <button type="button" className="icon-btn" aria-label="More" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <MoreHorizontal size={16} />
+      </button>
+      {open && (
+        <div className="row-menu-pop" role="menu">
+          {items.map((it) => (
+            <button
+              key={it.label}
+              type="button"
+              role="menuitem"
+              className={it.danger ? 'row-menu-item danger' : 'row-menu-item'}
+              onClick={() => {
+                setOpen(false);
+                it.run();
+              }}
+            >
+              {it.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

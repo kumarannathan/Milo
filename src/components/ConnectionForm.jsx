@@ -53,15 +53,7 @@ export function ConnectionForm({ provider, connection, onSaved, onCancel, submit
         )}
       </div>
 
-      <div className="cap-tags">
-        {provider.capabilities.map((c) => (
-          <Tag key={c} color="gray">
-            {c}
-          </Tag>
-        ))}
-      </div>
-
-      <Field label="Name" help="Shown when you pick which connection an agent uses.">
+      <Field label="Name">
         <Input value={label} onChange={(e) => setLabel(e.target.value)} />
       </Field>
 
@@ -131,7 +123,7 @@ export function ProviderPicker({ providers, onPick, connections = [], needed = n
                       {p.name}
                       {count > 0 && <Tag color="green">Added</Tag>}
                     </span>
-                    <span className="provider-card-caps">{p.capabilities.join(' · ')}</span>
+                    <span className="provider-card-caps">{p.description ?? `${p.capabilities.length} ${p.capabilities.length === 1 ? 'action' : 'actions'}`}</span>
                   </span>
                   {helps > 0 && count === 0 && <Tag color="blue">Needed</Tag>}
                 </button>

@@ -142,7 +142,6 @@ function StatsStrip() {
     <section className="cr-section">
       <div className="cr-section-head">
         <h2>Today</h2>
-        <span className="muted small">Since midnight · bars show the last 7 days</span>
       </div>
       <div className="cr-stats" style={{ gridTemplateColumns: `repeat(${stats?.length || 8}, minmax(0, 1fr))` }}>
         {(stats ?? Array.from({ length: 8 }, () => null)).map((s, i) => (
@@ -175,7 +174,6 @@ function Pipeline({ agents, loading, paused, now }) {
     <section className="cr-section">
       <div className="cr-section-head">
         <h2>Pipeline</h2>
-        <span className="muted small">Work moves left to right. Each agent hands off to the next.</span>
         <a href="#/agents" className="panel-link cr-section-link">
           All agents →
         </a>
@@ -273,9 +271,7 @@ function ActivityPanel({ agents, paused }) {
         </div>
       ) : items.length === 0 ? (
         filter === 'all' ? (
-          <EmptyState title="No activity yet" actions={first && <RunFirst agent={first} />}>
-            {first ? `${first.name} ${first.schedule.type === 'cron' ? `runs ${first.schedule.label.toLowerCase()}` : 'runs when work arrives'}. You can run it now and watch the first results come in.` : 'Turn on an agent to get started.'}
-          </EmptyState>
+          <EmptyState title="No activity yet" actions={first && <RunFirst agent={first} />} />
         ) : (
           <EmptyState compact title={filter === 'errors' ? 'No errors' : 'Nothing sent yet'} />
         )

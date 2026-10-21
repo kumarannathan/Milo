@@ -41,7 +41,7 @@ function emptyData() {
   return data;
 }
 
-export function createStore({ dir, file = 'milo.json', onChange = () => {} } = {}) {
+export function createStore({ dir, file = 'milo.json', onChange = () => {}, log = console } = {}) {
   const filePath = dir ? path.join(dir, file) : null;
   let data = emptyData();
   let saveTimer = null;
@@ -49,16 +49,28 @@ export function createStore({ dir, file = 'milo.json', onChange = () => {} } = {
   let notifyScheduled = false;
 
   if (filePath && fs.existsSync(filePath)) {
-    const loaded = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    data = { ...emptyData(), ...loaded };
+    try {
+      const loaded = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      data = { ...emptyData(), ...loaded };
+    } catch (err) {
+      // A half-written or corrupt file must not take the whole server down: keep it aside and start clean.
+      const backup = `${filePath}.corrupt-${Date.now()}`;
+      fs.renameSync(filePath, backup);
+      log.error?.(`[store] ${filePath} could not be read (${err.message}); moved to ${backup} and starting empty.`);
+    }
   }
 
   function writeNow() {
     if (!filePath) return;
-    fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
-    const tmp = `${filePath}.tmp`;
-    fs.writeFileSync(tmp, JSON.stringify(data), { mode: 0o600 });
-    fs.renameSync(tmp, filePath);
+    try {
+      fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+      const tmp = `${filePath}.tmp`;
+      fs.writeFileSync(tmp, JSON.stringify(data), { mode: 0o600 });
+      fs.renameSync(tmp, filePath);
+    } catch (err) {
+      // Disk full or permissions: keep running with the in-memory copy and try again on the next change.
+      log.error?.(`[store] could not save ${filePath}: ${err.message}`);
+    }
   }
 
   function scheduleSave() {

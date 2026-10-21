@@ -294,20 +294,11 @@ export default function Approvals({ selectedId }) {
       <header className="page-header">
         <div className="page-header-text">
           <h1>Approvals</h1>
-          <div className="page-sub ap-sub">
-            {autonomy && (
-              <>
-                Autonomy is set to <b>{autonomy.label}</b>.{' '}
-              </>
-            )}
-            {markets
-              ? 'Trades wait here. Nothing is placed until you approve it.'
-              : autonomy?.id === 'review_first_touch'
-                ? 'First emails to each person wait here. Follow-ups and replies go out on their own.'
-                : autonomy?.id === 'autopilot'
-                  ? 'Nothing waits for review. Anything an agent can’t decide still comes here.'
-                  : 'Emails, replies and meeting invites wait here. Nothing is sent until you approve it.'}
-          </div>
+          {autonomy && (
+            <div className="page-sub ap-sub">
+              <a href="#/account">{autonomy.label}</a>
+            </div>
+          )}
         </div>
         <Segmented
           size="md"
@@ -334,11 +325,7 @@ export default function Approvals({ selectedId }) {
             </a>
           }
         >
-          {markets
-            ? 'When an agent proposes a trade, it waits here for you before anything is placed.'
-            : `When Personalizer writes a draft or SDR prepares a reply, it waits here for you. ${
-                queued ? `Personalizer has ${plural(queued, 'account')} in its queue.` : 'Personalizer’s queue is empty right now.'
-              }`}
+          {queued ? `${plural(queued, 'account')} waiting for a draft.` : null}
         </EmptyState>
       ) : (
         <div className="ap-grid">
@@ -401,9 +388,7 @@ export default function Approvals({ selectedId }) {
                       )}
                     </>
                   ) : (
-                    <span className="ap-actions-note">
-                      {current.status === 'rejected' ? 'Rejected items stay here for reference.' : 'Approved items can’t be edited.'}
-                    </span>
+                    <span className="ap-actions-note">{current.status === 'rejected' ? 'Rejected' : 'Approved'}</span>
                   )}
                   <span className="ap-position">
                     {index + 1} of {items.length}

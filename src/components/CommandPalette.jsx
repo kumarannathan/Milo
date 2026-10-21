@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowRight, Building2, CandlestickChart, Moon, Pause, Play, Search, Sun } from 'lucide-react';
+import { ArrowRight, Building2, Moon, Pause, Play, Search, Sun } from 'lucide-react';
 import { api, qs } from '../lib/api.js';
 import { useApp } from '../lib/app-context.jsx';
 import { useResource } from '../lib/live.js';
@@ -9,7 +9,7 @@ import { NAV } from './Sidebar.jsx';
 import { useToast } from './feedback.jsx';
 import { Kbd, Mono } from './ui.jsx';
 
-function useSearch(playbookId, query) {
+function useSearch(query) {
   const [results, setResults] = useState([]);
   useEffect(() => {
     const q = query.trim();
@@ -20,13 +20,8 @@ function useSearch(playbookId, query) {
     let cancelled = false;
     const t = setTimeout(async () => {
       try {
-        if (playbookId === 'sales') {
-          const r = await api.get(`/api/accounts${qs({ q, limit: 6 })}`);
-          if (!cancelled) setResults(r.accounts.map((a) => ({ id: a.id, label: a.name, hint: a.domain, href: `#/accounts/${a.id}` })));
-        } else {
-          const r = await api.get(`/api/markets${qs({ q, status: 'all' })}`);
-          if (!cancelled) setResults(r.markets.slice(0, 6).map((m) => ({ id: m.id, label: m.question, hint: m.category ?? '', href: `#/markets/${m.id}` })));
-        }
+        const r = await api.get(`/api/accounts${qs({ q, limit: 6 })}`);
+        if (!cancelled) setResults(r.accounts.map((a) => ({ id: a.id, label: a.name, hint: a.domain, href: `#/accounts/${a.id}` })));
       } catch {
         if (!cancelled) setResults([]);
       }
@@ -35,7 +30,7 @@ function useSearch(playbookId, query) {
       cancelled = true;
       clearTimeout(t);
     };
-  }, [playbookId, query]);
+  }, [query]);
   return results;
 }
 
@@ -48,7 +43,7 @@ export function CommandPalette({ dark, onToggleTheme }) {
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const agents = useResource(open ? '/api/agents' : null, ['agents']).data?.agents ?? [];
-  const found = useSearch(app.playbook.id, open ? query : '');
+  const found = useSearch(open ? query : '');
 
   useEffect(() => {
     const onKey = (e) => {
@@ -114,15 +109,15 @@ export function CommandPalette({ dark, onToggleTheme }) {
       },
     });
     list.push({ id: 'theme', group: 'Team', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: dark ? Sun : Moon, run: onToggleTheme });
-    if (app.playbook.id === 'sales') list.push({ id: 'import', group: 'Team', label: 'Import accounts from CSV', icon: Building2, run: go('/accounts') });
-    else list.push({ id: 'add-market', group: 'Team', label: 'Add a market by link', icon: CandlestickChart, run: go('/markets') });
+    list.push({ id: 'import', group: 'Team', label: 'Import accounts from CSV', icon: Building2, run: go('/accounts') });
+    list.push({ id: 'account', group: 'Team', label: 'Account', icon: ArrowRight, run: go('/account') });
     return list;
   }, [app.workspace, app.playbook, agents, dark, onToggleTheme, toast]);
 
   const q = query.trim().toLowerCase();
   const filtered = q ? commands.filter((c) => c.label.toLowerCase().includes(q) || c.group.toLowerCase().includes(q)) : commands;
   const items = [
-    ...found.map((r) => ({ id: `found-${r.id}`, group: app.playbook.id === 'sales' ? 'Accounts' : 'Markets', label: r.label, hint: r.hint, icon: ArrowRight, run: () => navigate(r.href) })),
+    ...found.map((r) => ({ id: `found-${r.id}`, group: 'Accounts', label: r.label, hint: r.hint, icon: ArrowRight, run: () => navigate(r.href) })),
     ...filtered,
   ];
   const active = Math.min(index, Math.max(items.length - 1, 0));
@@ -167,7 +162,7 @@ export function CommandPalette({ dark, onToggleTheme }) {
               setIndex(0);
             }}
             onKeyDown={onKeyDown}
-            placeholder={app.playbook.id === 'sales' ? 'Search accounts or type a command' : 'Search markets or type a command'}
+            placeholder="Search accounts or type a command"
             aria-label="Search"
           />
           <Kbd>esc</Kbd>

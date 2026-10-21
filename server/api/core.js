@@ -148,8 +148,8 @@ function cleanValues(provider, values = {}, existing = {}) {
   return out;
 }
 
-export function registerCoreRoutes(router, { store, runner, bus }) {
-  router.get('/api/health', () => ({ ok: true, version: VERSION }));
+export function registerCoreRoutes(router, { store, runner, bus, tenants, auth }) {
+  router.get('/api/health', () => ({ ok: true, version: VERSION, auth: auth?.mode ?? 'none', tenants: tenants?.size() ?? 0 }));
 
   router.get('/api/meta', async () => {
     const { loadProviders } = await import('../providers/index.js');
@@ -171,11 +171,12 @@ export function registerCoreRoutes(router, { store, runner, bus }) {
     };
   });
 
-  router.post('/api/setup', async ({ body }) => {
-    if (store.getValue('workspace')) throw new HttpError(409, 'Milo is already set up. Reset the workspace in Settings to start over.');
+  router.post('/api/setup', async ({ req, body }) => {
+    if (store.getValue('workspace')) throw new HttpError(409, 'This workspace is already set up. Reset it under Account to start over.');
     const pb = getPlaybook(body.playbook);
-    if (!pb) throw badRequest('Pick Sales development or Markets.');
+    if (!pb) throw badRequest('Pick a playbook.');
     const demo = !!body.demo;
+    const account = req.user && req.user.id !== 'local' ? req.user : null; // a signed-in person owns the workspace
     const settings = { ...(demo ? pb.demo.settings : {}), ...(body.settings ?? {}) };
     if (!demo) {
       const missing = pb.settings.filter((f) => f.required && (settings[f.key] === undefined || settings[f.key] === ''));
@@ -190,7 +191,7 @@ export function registerCoreRoutes(router, { store, runner, bus }) {
       autonomy: body.autonomy && pb.autonomy.some((a) => a.id === body.autonomy) ? body.autonomy : pb.defaultAutonomy,
       paused: false,
       pausedAt: null,
-      owner: { name: body.owner?.name || settings.senderName || 'You', email: body.owner?.email || settings.senderEmail || '' },
+      owner: { name: body.owner?.name || account?.name || settings.senderName || 'You', email: body.owner?.email || account?.email || settings.senderEmail || '' },
       settings: { workers: 3, ...settings },
       defaultModel: null,
       bindings: {},

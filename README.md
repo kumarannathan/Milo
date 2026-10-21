@@ -4,15 +4,13 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-0f172a.svg)](LICENSE)
 ![Node 20+](https://img.shields.io/badge/node-%E2%89%A520-0f172a.svg)
 
-A control room for autonomous agent teams. Pick a playbook, bring your own keys, and watch your agents work.
+A control room for an autonomous sales development team. Create an account, connect your own keys, and review everything the agents want to send before it goes out.
 
-Milo runs on your machine as a single Node process. You choose a team of agents, connect the services they need, and review everything they want to send or trade before it goes out. Every run, tool call, token and dollar is visible.
+Milo is one Node process that serves the app, runs the agents and keeps each account's workspace separate. Every run, tool call, token and dollar is visible.
 
-## Playbooks
+## The team
 
-You pick one when you first open Milo.
-
-**Sales development.** Seven agents hand work down a pipeline:
+Seven agents hand work down a pipeline:
 
 | Agent | Job |
 | --- | --- |
@@ -24,27 +22,15 @@ You pick one when you first open Milo.
 | SDR | Sends approved outreach, reads replies, books meetings, escalates |
 | CRM Agent | Keeps your CRM in sync with everything the team does |
 
-**Markets.** Five agents work prediction markets with paper money:
-
-| Agent | Job |
-| --- | --- |
-| Scanner | Finds active markets worth watching |
-| Whale Watch | Follows large trades on the markets you watch |
-| Analyst | Writes a brief and estimates the odds for each market |
-| Trader | Sizes and places paper trades when the edge is big enough |
-| Bookkeeper | Marks positions to market and settles resolved ones |
-
-No real money moves in the Markets playbook.
-
 ## What you get
 
-- **Approvals.** Emails, replies, meeting invites and trades wait in an inbox until you approve them. Edit a draft before it goes out, or reject it with a note and the writer uses your note next time. Raise the autonomy level when you trust it.
+- **Approvals.** Emails, replies and meeting invites wait in an inbox until you approve them. Edit a draft before it goes out, or reject it with a note and the writer uses your note next time. Raise the autonomy level when you trust it.
 - **Your own connections.** Agents ask for actions such as "Find companies" or "Verify emails", and you choose which connection does each one. Nothing points at anyone else's account.
 - **Per-agent control.** Turn agents on and off, change schedules (cron or "when work arrives"), pick a model per agent, edit each agent's settings, and give it standing instructions that ride along with every prompt.
 - **Full visibility.** Every run with duration, tokens and cost. Every tool call with its status code and latency. A live activity feed and a pause button for the whole team.
-- **Sample data mode.** Try the full pipeline with made-up companies or markets and a built-in sample model. No keys needed.
-- **Keyboard first.** Press ⌘K (Ctrl+K) to jump anywhere, run an agent, or search accounts and markets. The approvals inbox works with J, K, X, E, R and ⌘Enter.
-- **Your data stays yours.** One JSON file on disk, and an export from Settings that leaves keys out.
+- **Sample data.** Try the full pipeline with made-up companies and a built-in sample model. No keys needed.
+- **Keyboard first.** Press ⌘K (Ctrl+K) to jump anywhere, run an agent, or search accounts. The approvals inbox works with J, K, X, E, R and ⌘Enter.
+- **Your data stays yours.** One JSON file per workspace on disk, and an export from Account that leaves keys out.
 
 ## Quick start
 
@@ -83,14 +69,19 @@ Each connection is tested when you save it. See [docs/providers.md](docs/provide
 
 ## Configuration
 
-Keys are added in the app, not in files. The server itself reads a few optional environment variables (copy `.env.example` to `.env`):
+Keys are added in the app, not in files. The server reads a few optional environment variables (copy `.env.example` to `.env`):
 
 | Variable | Default | |
 | --- | --- | --- |
 | `MILO_PORT` | `4400` | Port to listen on |
-| `MILO_HOST` | `127.0.0.1` | Address to bind. Use `0.0.0.0` to expose it on your network. |
-| `MILO_DATA_DIR` | `data` | Where `milo.json` is stored |
-| `MILO_PASSWORD` | | Require this password (HTTP basic auth) for every request |
+| `MILO_HOST` | `127.0.0.1` | Address to bind. Use `0.0.0.0` to expose it. |
+| `MILO_PUBLIC_URL` | | The https URL users open when hosted; turns on Secure cookies |
+| `MILO_AUTH` | `local` | `local` (email + password on this machine), `supabase`, or `none` (single user, no sign-in) |
+| `MILO_SESSION_SECRET` | generated | Signs session cookies for `local` auth |
+| `SUPABASE_URL`, `SUPABASE_JWT_SECRET` | | For `MILO_AUTH=supabase` |
+| `MILO_DATA_DIR` | `data` | Where workspaces are stored (`data/tenants/<user>/milo.json`) |
+| `MILO_PLAYBOOKS` | `sales` | Playbooks offered. Add `markets` to enable paper trading on prediction markets. |
+| `MILO_PASSWORD` | | Optional extra lock (HTTP basic auth) in front of everything |
 
 ## How it works
 
@@ -99,7 +90,9 @@ Agents hand work to each other through a task queue. A scheduler runs each agent
 ```
 server/
   runner/      scheduler, run context, capability routing
-  playbooks/   sales/ and markets/ agents and routes
+  playbooks/   agents and routes per playbook
+  auth/        local and Supabase account adapters
+  tenants.js   one store + runner + event bus per account
   providers/   one file per service
   api/         REST routes
 src/           React app
@@ -108,7 +101,7 @@ site/          landing page
 
 ## Data and privacy
 
-Everything is stored in `data/milo.json` on your machine, including connection keys (the file is created with owner-only permissions). Keys are only sent to the service they belong to and are never returned to the browser in full. Milo binds to localhost by default; set `MILO_PASSWORD` before exposing it.
+Each account's workspace is one JSON file under `data/`, including its connection keys (files are created with owner-only permissions). Keys are only sent to the service they belong to and are never returned to the browser in full. Milo binds to localhost by default; set `MILO_PUBLIC_URL` and run behind TLS before exposing it.
 
 ## Development
 
@@ -125,7 +118,8 @@ Set `MILO_DEMO_FAST=1` to make the sample-data provider respond instantly, which
 
 - Email works over SMTP and IMAP with a password or app password. Microsoft 365 and Outlook.com need OAuth and are not supported yet.
 - Calendar booking uses Cal.com. Without it, the SDR offers your booking link instead.
-- The Markets playbook reads Polymarket's public data and trades on paper only. There is no live trading.
+- Password reset emails arrive with the hosted auth provider; `local` accounts can change their password from Account but not reset it.
+- Workspaces are JSON files, so run one instance. The Supabase store comes next.
 
 ## License
 

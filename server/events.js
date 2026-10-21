@@ -26,6 +26,8 @@ export function createEventBus() {
       for (const res of clients) res.write(payload);
     },
 
+    size: () => clients.size,
+
     close() {
       clearInterval(heartbeat);
       for (const res of clients) res.end();

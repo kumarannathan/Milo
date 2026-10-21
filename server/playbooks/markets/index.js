@@ -11,7 +11,7 @@ export default {
   name: 'Markets',
   tagline: 'Watch prediction markets, follow large trades, research the odds, paper-trade the edge.',
   agents: [scanner, whales, analyst, trader, bookkeeper],
-  nav: ['control-room', 'approvals', 'markets', 'positions', 'agents', 'connections', 'settings'],
+  nav: ['control-room', 'approvals', 'markets', 'positions', 'agents', 'connections', 'account'],
 
   autonomy: [
     {
