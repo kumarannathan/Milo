@@ -13,7 +13,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': { target: `http://127.0.0.1:${apiPort}`, changeOrigin: true },
+      // changeOrigin stays off so Host remains localhost:5173 and the server's same-origin check passes in dev.
+      '/api': { target: `http://127.0.0.1:${apiPort}`, changeOrigin: false },
     },
   },
 });
