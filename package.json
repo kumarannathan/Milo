@@ -1,7 +1,7 @@
 {
   "name": "milo",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Open-source control room for autonomous agent teams. Sales development and prediction markets, with your own keys.",
   "type": "module",
   "scripts": {
