@@ -1,0 +1,31 @@
+# Builds Milo.app for macOS and attaches the .dmg files to a GitHub release.
+# Trigger: push a tag like v0.2.0. The release is created as a draft; publish it when the files look right.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mac:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+        env:
+          MILO_DEMO_FAST: '1'
+      - run: npm run build
+      - run: npx electron-builder --mac --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Unsigned build: no Apple developer certificate. Users go through "Open Anyway" once.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'

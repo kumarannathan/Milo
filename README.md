@@ -32,9 +32,15 @@ Seven agents hand work down a pipeline:
 - **Keyboard first.** Press ⌘K (Ctrl+K) to jump anywhere, run an agent, or search accounts. The approvals inbox works with J, K, X, E, R and ⌘Enter.
 - **Your data stays yours.** One JSON file per workspace on disk, and an export from Account that leaves keys out.
 
-## Quick start
+## Milo for Mac
 
-Requires Node 20 or later.
+Download the latest `.dmg` from [Releases](https://github.com/kumarannathan/Milo/releases/latest), drag Milo to Applications and open it. The app runs the server and the agents inside itself, stores your workspace under `~/Library/Application Support/Milo`, and has no accounts: you are the user. It is not notarized, so the first launch needs **System Settings › Privacy & Security › Open Anyway** (or `xattr -dr com.apple.quarantine /Applications/Milo.app`).
+
+To build it yourself: `npm run dist:mac` writes the `.dmg` files to `release/`. Pushing a `v*` tag builds them on GitHub Actions and attaches them to a draft release.
+
+## Quick start (server)
+
+Requires Node 20 or later. The server version adds accounts, so a team can share one deployment.
 
 ```bash
 git clone https://github.com/kumarannathan/milo.git
@@ -107,6 +113,7 @@ Each account's workspace is one JSON file under `data/`, including its connectio
 
 ```bash
 npm run dev        # API on :4400 with restart on change, web app on :5173
+npm run desktop    # build the web app and open it in the Electron shell
 npm test           # node:test suite
 npm run build      # build the web app into dist/
 npm run dev:site   # landing page on :5180

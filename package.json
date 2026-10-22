@@ -1,7 +1,7 @@
 {
   "name": "milo",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Open-source control room for autonomous agent teams. Sales development and prediction markets, with your own keys.",
   "type": "module",
   "scripts": {
@@ -11,7 +11,9 @@
     "build:site": "vite build --config vite.site.config.js",
     "dev:site": "vite --config vite.site.config.js",
     "test": "node --test test/",
-    "preview": "npm run build && npm start"
+    "preview": "npm run build && npm start",
+    "desktop": "npm run build && electron .",
+    "dist:mac": "npm run build && electron-builder --mac"
   },
   "dependencies": {
     "imapflow": "^2.2.6",
@@ -23,10 +25,68 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
     "vite": "^5.4.1"
   },
   "engines": {
     "node": ">=20"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "main": "desktop/main.js",
+  "build": {
+    "appId": "com.kumarannathan.milo",
+    "productName": "Milo",
+    "copyright": "© 2026 Kumaran Nathan",
+    "directories": {
+      "buildResources": "desktop/build",
+      "output": "release"
+    },
+    "asar": false,
+    "files": [
+      "desktop/main.js",
+      "server/**/*",
+      "dist/**/*",
+      "package.json",
+      "!server/**/*.test.js"
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "desktop/build/icon.png",
+      "hardenedRuntime": false,
+      "identity": null,
+      "darkModeSupport": true,
+      "artifactName": "Milo-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "title": "Milo",
+      "contents": [
+        {
+          "x": 140,
+          "y": 180
+        },
+        {
+          "x": 400,
+          "y": 180,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "kumarannathan",
+      "repo": "Milo",
+      "releaseType": "draft"
+    }
+  }
 }
