@@ -34,9 +34,9 @@ Seven agents hand work down a pipeline:
 
 ## Milo for Mac
 
-Download the latest `.dmg` from [Releases](https://github.com/kumarannathan/Milo/releases/latest), drag Milo to Applications and open it. The app runs the server and the agents inside itself, stores your workspace under `~/Library/Application Support/Milo`, and has no accounts: you are the user. It is not notarized, so the first launch needs **System Settings › Privacy & Security › Open Anyway** (or `xattr -dr com.apple.quarantine /Applications/Milo.app`).
+Download the latest `.dmg` from [Releases](https://github.com/kumarannathan/Milo/releases/latest), drag Milo to Applications and open it. The app runs the server and the agents inside itself, stores your workspace under `~/Library/Application Support/Milo`, and has no accounts: you are the user. Releases are signed with a Developer ID and notarized by Apple, so it opens like any other app.
 
-To build it yourself: `npm run dist:mac` writes the `.dmg` files to `release/`. Pushing a `v*` tag builds them on GitHub Actions and attaches them to a draft release.
+To build it yourself: `npm run dist:mac` writes the `.dmg` files to `release/` (unsigned unless you have a Developer ID certificate in your keychain). Pushing a `v*` tag builds, signs and notarizes them on GitHub Actions and attaches them to a draft release; the secrets it needs are listed in `.github/workflows/release.yml`.
 
 ## Quick start (server)
 

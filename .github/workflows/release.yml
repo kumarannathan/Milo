@@ -27,5 +27,15 @@ jobs:
       - run: npx electron-builder --mac --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Unsigned build: no Apple developer certificate. Users go through "Open Anyway" once.
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          # Signing + notarization. Repo secrets (Settings → Secrets and variables → Actions):
+          #   MAC_CERT_P12         base64 of the "Developer ID Application" certificate exported as .p12
+          #   MAC_CERT_PASSWORD    the password you gave that .p12
+          #   APPLE_ID             your Apple ID email
+          #   APPLE_APP_PASSWORD   an app-specific password from appleid.apple.com
+          #   APPLE_TEAM_ID        10-character team id from developer.apple.com/account
+          # With the secrets missing, electron-builder skips signing and the build still succeeds.
+          CSC_LINK: ${{ secrets.MAC_CERT_P12 }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}

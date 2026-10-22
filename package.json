@@ -37,7 +37,7 @@
   "build": {
     "appId": "com.kumarannathan.milo",
     "productName": "Milo",
-    "copyright": "© 2026 Kumaran Nathan",
+    "copyright": "\u00a9 2026 Kumaran Nathan",
     "directories": {
       "buildResources": "desktop/build",
       "output": "release"
@@ -62,10 +62,13 @@
         }
       ],
       "icon": "desktop/build/icon.png",
-      "hardenedRuntime": false,
-      "identity": null,
+      "hardenedRuntime": true,
       "darkModeSupport": true,
-      "artifactName": "Milo-${version}-${arch}.${ext}"
+      "artifactName": "Milo-${version}-${arch}.${ext}",
+      "gatekeeperAssess": false,
+      "entitlements": "desktop/build/entitlements.mac.plist",
+      "entitlementsInherit": "desktop/build/entitlements.mac.plist",
+      "notarize": true
     },
     "dmg": {
       "title": "Milo",
