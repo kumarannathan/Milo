@@ -10,7 +10,7 @@
     "build": "vite build",
     "build:site": "vite build --config vite.site.config.js",
     "dev:site": "vite --config vite.site.config.js",
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "preview": "npm run build && npm start",
     "desktop": "npm run build && electron .",
     "dist:mac": "npm run build && electron-builder --mac"
